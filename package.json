@@ -12,6 +12,10 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.19.2",
+    "formidable": "^3.5.1",
+    "fs": "^0.0.1-security",
+    "fs-extra": "^11.2.0",
+    "markdown-it": "^14.1.0",
     "ws": "^8.17.0"
   }
 }

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PackageProbe</title>
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+
+<body>
+  <h1>File Upload Example</h1>
+  <form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" name="file" id="fileInput" accept=".json">
+    <button type="submit">Upload</button>
+  </form>
+  <div id="fileData">
+    Output
+    <br> 
+  </div>
+
+  <script>
+    
+    const socket = new WebSocket('ws://localhost:3000');
+
+    socket.onopen = () => {
+        console.log('WebSocket connection established');
+    };
+
+    socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            console.log('Message from server:', data);
+            
+            const message = data.replace(/\n/g, '<br>');
+
+            // if(data === '<br>')
+            
+            //   document.getElementById('fileData').innerHTML += '<br>';
+            // else
+              document.getElementById('fileData').innerHTML += data;
+            // document.getElementById('fileData').innerHTML += '<br>';
+        };
+
+    socket.onclose = () => {
+        console.log('WebSocket connection closed');
+    };
+
+    socket.onerror = (error) => {
+        console.error('WebSocket error:', error);
+    };
+
+    document.getElementById('uploadForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const formData = new FormData();
+      formData.append('file', document.getElementById('fileInput').files[0]);
+
+
+      fetch('/upload', {
+        method: 'POST',
+        body: formData,
+      })
+      // .then(response => response.json())
+      // .then(data => {
+      //   document.getElementById('fileData').textContent = data.fileData;
+      // })
+      // .catch(error => console.error('Error:', error));
+    });
+  </script>
+</body>
+</html>
