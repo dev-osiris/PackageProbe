@@ -114,26 +114,25 @@ function getLatestVer(data){
   }
 }
 
-async function getDependency(pkg){
+async function getDependency(package_name, package_version){
   dep_count++;
-  console.log("Curr pkg: ", pkg);
-  sendDataToFront(`curr pkg: ${pkg}`);
+  console.log("Curr pkg: ", package_name, package_version);
+  sendDataToFront(`curr pkg: ${package_name} ${package_version}`);
   let dependencies;
 
   try{
-    const response = await fetch(`https://registry.npmjs.org/${pkg}`, {method: "GET"});
+    const response = await fetch(`https://registry.npmjs.org/${package_name}/${package_version}`, {method: "GET"});
     const data = await response.json();
-    const latestVerData = getLatestVer(data);
-    // 
+    // const latestVerData = getLatestVer(data);
 
     // add the curr package name and ver in the dep_obj if it is empty
     if(Object.keys(dep_obj).length === 0){
-      dep_obj[latestVerData.name] = latestVerData.version;
+      dep_obj[data.name] = data.version;
     }
 
-    dependencies = latestVerData.dependencies;
+    dependencies = data.dependencies; //TODO: LOOK FOR DEVDEPENDENCIES
     if(dependencies){
-      console.log(pkg, " dependencies: ", dependencies);
+      console.log(package_name, " dependencies: ", dependencies);
       sendDataToFront(`dependencies ${JSON.stringify(dependencies)}`);
       dep_obj = {...dep_obj, ...dependencies}
     }
@@ -155,6 +154,7 @@ async function DFS(dependency, vis){
   // DFS of dependency tree
   while(stack.length > 0){
     const curr_dependency = stack.pop();
+    // console.log("curr dep: ", curr_dependency);
     if(!curr_dependency){
       continue;
     }
@@ -162,7 +162,7 @@ async function DFS(dependency, vis){
       if(vis.has(pkg)) continue;
       else vis.add(pkg);
 
-      stack.push(await getDependency(pkg));
+      stack.push(await getDependency(pkg, curr_dependency[pkg]));
     }
   }
 }
@@ -182,13 +182,13 @@ async function makeJSON(pkg){
         if(err) throw err;
 
       // do audit
-      execSync("cd JSON && npm audit", { encoding: 'utf-8' }, (_1, out, _2) => {
+      execSync("cd JSON && npm audit", { encoding: 'utf-8' }, (_1, audit_report, _2) => {
         // if(_1) throw _1;
         console.log(pkg, ": ");
-        console.log(out);
+        console.log(audit_report);
 
-        sendDataToFront(`${pkg}: `);
-        sendDataToFront(`${out}`);
+        sendDataToFront(`${JSON.stringify(pkg)}: `);
+        sendDataToFront(`${audit_report}`);
       }); 
     }); 
   });
@@ -196,9 +196,15 @@ async function makeJSON(pkg){
 
 async function findVulnerabilites(pkg_to_test){
 
-  const package_name = pkg_to_test;
+  const package_name = pkg_to_test[0];
+  let package_version = pkg_to_test[1];
 
-  const dependency = await getDependency(package_name);
+  // remove ^ if it exists from package version
+  if(package_version[0] === '^'){
+    package_version = package_version.slice(1);
+  }
+
+  const dependency = await getDependency(package_name, package_version);
   let vis = new Set(package_name); //visit set to avoid visiting duplicate dependencies
   
   DFS(dependency, vis);
@@ -224,5 +230,5 @@ function handleFileLoad(data) {
           
     dependencies = dependencies.filter((dep_ver_pair) => dep_ver_pair[0].charAt(0) !== '@');
     console.log(dependencies);
-    dependencies.map((dependency) => findVulnerabilites(dependency[0]));
+    dependencies.map((dependency) => findVulnerabilites(dependency));
 }

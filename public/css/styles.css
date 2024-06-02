@@ -26,5 +26,10 @@ body {
   
   #fileData {
     margin-top: 20px;
-    text-align: center;
+    height: 70vh;
+    width: 80vw;
+    margin: 4vh auto;
+    overflow-y: auto;
+    overflow-x: auto;
+    border: solid crimson;
   }
