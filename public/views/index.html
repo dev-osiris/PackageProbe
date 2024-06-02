@@ -27,18 +27,17 @@
     };
 
     socket.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            console.log('Message from server:', data);
-            
-            const message = data.replace(/\n/g, '<br>');
+        const data = JSON.parse(event.data);
+        console.log('Message from server:', data);
+        
+        const message = data.replace(/\n/g, '<br>');
 
-            // if(data === '<br>')
-            
-            //   document.getElementById('fileData').innerHTML += '<br>';
-            // else
-              document.getElementById('fileData').innerHTML += data;
-            // document.getElementById('fileData').innerHTML += '<br>';
-        };
+        const fileDataDiv = document.getElementById('fileData')
+        fileDataDiv.innerHTML += data;
+
+        // Auto-scroll to the bottom
+        fileDataDiv.scrollTop = fileDataDiv.scrollHeight;
+    };
 
     socket.onclose = () => {
         console.log('WebSocket connection closed');
