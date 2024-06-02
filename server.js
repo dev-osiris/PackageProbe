@@ -57,7 +57,16 @@ app.post('/upload', (req, res) => {
             res.end('Internal Server Error');
             return;
         }
-        const filePath = files.file[0].filepath;
+        
+        let filePath;
+        try{
+          filePath = files.file[0].filepath;
+        }
+        catch{
+          console.log("No file selected.");
+          sendDataToFront("Please select a file first.");
+          return;
+        }
 
         // Read uploaded file
         fs.readFile(filePath, 'utf-8', (err, data) => {
