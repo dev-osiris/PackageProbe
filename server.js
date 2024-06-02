@@ -31,8 +31,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Serve static files from the 'views' directory
 // Default route
 app.get('/', (req, res) => {
-    // res.sendFile(path.join(__dirname, 'views', 'index.html'));
-
     fs.readFile(path.join(__dirname, 'public', 'views', 'index.html'), 'utf-8', (err, data) => {
         if (err) {
           res.writeHead(500, { 'Content-Type': 'text/plain' });
@@ -41,7 +39,6 @@ app.get('/', (req, res) => {
           res.writeHead(200, { 'Content-Type': 'text/html' });
           res.write(data);
           res.end();
-          console.log("index.html rendered");
         }
     });
 });
@@ -51,7 +48,6 @@ app.post('/upload', (req, res) => {
     const form = new formidable.IncomingForm();
           
     fsExtra.emptyDirSync('./uploads');
-    // require("fs/promises").rm('./uploads', {recursive: true}); //empty uploads folder first
     form.uploadDir = path.join(__dirname, 'uploads');
     form.keepExtensions = true;
     
@@ -74,10 +70,6 @@ app.post('/upload', (req, res) => {
             // Print file data
             // console.log('File Data:', data);
             handleFileLoad(data);
-
-            // Send file data back to frontend
-            // res.writeHead(200, { 'Content-Type': 'application/json' });
-            // res.end(JSON.stringify({ fileData: data }));
         });
     });
 });    
@@ -214,7 +206,7 @@ async function findVulnerabilites(pkg_to_test){
   console.log("total dependencies: ", dep_count);
   console.log("dep_obj: ", dep_obj);
 
-  sendDataToFront(`Total dependencies ${dep_count}`);
+  sendDataToFront(`Total dependencies: ${dep_count}`);
   
   makeJSON(pkg_to_test);
 }

@@ -5,9 +5,10 @@ body {
     background-color: burlywood;
   }
   
-  h1 {
+  h1,h3 {
     text-align: center;
   }
+  
   
   form {
     text-align: center;
