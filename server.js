@@ -13,6 +13,11 @@ const wss = new WebSocket.Server({ server });
 
 let clients = [];
 
+//////////////////////////////////////////////////////////////////////////////////////
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////
 
 function sendDataToFront(data){
     const md = markdown();
@@ -57,8 +62,9 @@ app.post('/upload', (req, res) => {
             res.end('Internal Server Error');
             return;
         }
-        
+
         let filePath;
+        console.log("files", files);
         try{
           filePath = files.file[0].filepath;
         }

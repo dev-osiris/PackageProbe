@@ -10,6 +10,18 @@ body {
   justify-content: center;
 }
 
+.dropArea {
+  border: 5px solid blue;
+  width: 200px;
+  height: 100px;
+}
+#dropArea.highlight {
+  background-color: #f0f0f0;
+}
+.highlight{
+  background-color: aqua;
+}
+
 main{
   display: flex;
   flex-direction: column;

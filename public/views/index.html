@@ -11,23 +11,24 @@
   <main>
     <h1>Package Probe</h1>
     <h3>upload your package.json to find vulnerabilites in your project</h3>
-    <form id="uploadForm" enctype="multipart/form-data">
-      <input type="file" name="file" id="fileInput" accept=".json">
-      <button type="submit">Upload</button>
+
+    <form id="uploadForm" class="dropArea" enctype="multipart/form-data">
+      <p>Drag & drop files here</p>
     </form>
+
     <div id="fileData">_> Drag and Drop a package.json file.</div>
   </main>
 
+
   <script>
-    
     const fileDataDiv = document.getElementById('fileData');
     const socket = new WebSocket('ws://localhost:3000');
 
     socket.onopen = () => {
         console.log('WebSocket connection established');
-      };
-      
-      socket.onmessage = (event) => {
+    };
+        
+    socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
         console.log('Message from server:', data);
         
@@ -37,29 +38,70 @@
         
         // Auto-scroll to the bottom
         fileDataDiv.scrollTop = fileDataDiv.scrollHeight;
-      };
-      
-      socket.onclose = () => {
-        console.log('WebSocket connection closed');
-      };
-      
-      socket.onerror = (error) => {
-        console.error('WebSocket error:', error);
-      };
-      
-      document.getElementById('uploadForm').addEventListener('submit', function (event) {
-        event.preventDefault();
-
-        fileDataDiv.innerHTML = ""; //remove the default msg in the fileData box
+    };
         
-        const formData = new FormData();
-        formData.append('file', document.getElementById('fileInput').files[0]);
+    socket.onclose = () => {
+        console.log('WebSocket connection closed');
+    };
 
-        fetch('/upload', {
+    socket.onerror = (error) => {
+        console.error('WebSocket error:', error);
+    };
+        
+    // Handle dropped files
+    const dropArea = document.getElementsByClassName('dropArea')[0];
+
+    // Prevent default behavior for drag and drop events
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    // Highlight drop area when dragging files over it
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropArea.addEventListener(eventName, highlight, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, unhighlight, false);
+    });
+
+    function highlight(e) {
+        dropArea.classList.add('highlight');
+    }
+
+    function unhighlight(e) {
+        dropArea.classList.remove('highlight');
+    }
+
+    dropArea.addEventListener('drop', handleDrop, false);
+
+    function handleDrop(e) {
+        
+      const dt = e.dataTransfer;
+      const file = dt.files;
+
+      if (file.length !== 1 || file[0].type !== 'application/json') {
+        alert('Please drop only one JSON file.');
+        return;
+      } 
+
+
+      fileDataDiv.innerHTML = ""; //remove the default msg in the fileData box
+      
+      const formData = new FormData();
+      formData.append('file', file[0]);
+
+      console.log("POST req sent")
+      fetch('/upload', {
           method: 'POST',
           body: formData,
-        })
       });
+    }
   </script>
 </body>
 </html>
