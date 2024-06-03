@@ -8,23 +8,13 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  transition: all 0.3s;
 }
 
 p{
   margin: 0;
 }
 
-.dropArea {
-  width: 50vw;
-  height: fit-content;
-  border: solid #b7b4ae;
-  margin: 1rem 0;
-  padding: 1rem 1rem;
-}
-
-.highlight{
-  background-color: #2ab4d337;
-}
 
 main{
   display: flex;
@@ -42,25 +32,6 @@ h1, h3{
 
 h1{
   font-size: 3rem;
-}
-
-.swatch_1{
-  background: #323232;
-}
-.swatch_2{
-  background: #e6e2d9;
-}
-.swatch_3{
-  background: #2ab4d3;
-}
-.swatch_4{
-  background: #818d8e;
-}
-.swatch_5{
-  background: #b7b4ae;
-}
-.swatch_6{
-  background: #6bd5e1;
 }
 
 
@@ -87,7 +58,7 @@ h1{
 ::-webkit-scrollbar-track {
   background: #b7b4ae; 
 }
- 
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: #818d8e; 
@@ -96,4 +67,25 @@ h1{
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #238da4; 
+}
+
+.dropArea {
+  width: 50vw;
+  height: fit-content;
+  border: solid #b7b4ae;
+  margin: 1rem 0;
+  padding: 1rem 1rem;
+}
+
+.dropArea:hover{
+  background-color: #2ab4d337;
+}
+
+.highlight{
+  background-color: #2ab4d337;
+}
+
+#OpenUpload{
+  width: 50vw;
+  height: 20vh;
 }

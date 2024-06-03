@@ -13,17 +13,6 @@ const wss = new WebSocket.Server({ server });
 
 let clients = [];
 
-function sendDataToFront(data){
-  console.log(data);
-  const md = markdown();
-
-  // Send message to all connected WebSocket clients
-  clients.forEach(client => {
-      if (client.readyState === WebSocket.OPEN) {
-          client.send(JSON.stringify(md.render(data)));
-      }
-  });
-}
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -93,6 +82,18 @@ server.listen(3000, () => {
 });
 
 
+function sendDataToFront(data){
+  // console.log(data);
+  const md = markdown();
+
+  // Send message to all connected WebSocket clients
+  clients.forEach(client => {
+    if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify(md.render(data)));
+    }
+  });
+}
+
 //===========================================================================================
 
 let dep_obj = {};
@@ -100,7 +101,7 @@ let dep_count = -1;
 
 async function getDependency(package_name, package_version){
   dep_count++;
-  sendDataToFront(`curr pkg: ${package_name} ${package_version}`);
+  sendDataToFront(`curr package: ${package_name}@${package_version}`);
   let dependencies;
 
   try{
@@ -114,7 +115,7 @@ async function getDependency(package_name, package_version){
 
     dependencies = data.dependencies; //TODO: LOOK FOR DEVDEPENDENCIES
     if(dependencies){
-      sendDataToFront(`dependencies ${JSON.stringify(dependencies)}`);
+      sendDataToFront(`dependencies: ${JSON.stringify(dependencies)}`);
       dep_obj = {...dep_obj, ...dependencies}
     }
     else{
@@ -173,8 +174,8 @@ async function findVulnerabilites(pkg_to_test){
   const package_name = pkg_to_test[0];
   let package_version = pkg_to_test[1];
 
-  // remove ^ if it exists from package version
-  if(package_version[0] === '^'){
+  // remove ^ and ~ if it exists from package version
+  if(package_version[0] === '^' || package_version[0] === '~'){
     package_version = package_version.slice(1);
   }
 

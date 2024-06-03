@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PackageProbe</title>
+  <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="../css/styles.css">
 </head>
 
@@ -12,15 +13,31 @@
     <h1>Package Probe</h1>
     <h3>upload your package.json to find vulnerabilites in your project</h3>
 
-    <form id="uploadForm" class="dropArea" enctype="multipart/form-data">
-      <p> Drag & drop files here</p>
+    <input type="file" id="imgupload" style="display:none"/>
+    <form 
+      id="uploadForm" 
+      class="dropArea" 
+      enctype="multipart/form-data"
+      onclick="handleUploadClick()"
+    >
+      <p id="dropText"> Drag and Drop or click to upload a package.json file.</p>
     </form>
 
-    <div id="fileData">_> Drag and Drop a package.json file.</div>
+    <div id="fileData">_> Upload your package.json above</div>
   </main>
 
 
   <script>
+
+    function handleUploadClick(e) {
+      const imgUploadEle = document.getElementById("imgupload");
+
+      imgUploadEle.click();
+      imgUploadEle.addEventListener("change", (e) => {
+        handleDrop(e, "upload");
+      });
+    }
+
     const fileDataDiv = document.getElementById('fileData');
     const socket = new WebSocket('ws://localhost:3000');
 
@@ -61,6 +78,7 @@
         e.stopPropagation();
     }
 
+
     // Highlight drop area when dragging files over it
     ['dragenter', 'dragover'].forEach(eventName => {
         dropArea.addEventListener(eventName, highlight, false);
@@ -80,15 +98,25 @@
 
     dropArea.addEventListener('drop', handleDrop, false);
 
-    function handleDrop(e) {
-        
-      const dt = e.dataTransfer;
-      const file = dt.files;
+    function handleDrop(e, mode) {
+      let file;
 
+      if(mode === undefined){
+        const dt = e.dataTransfer;
+        file = dt.files;
+      }
+      if(mode === "upload"){
+        file = e.target.files;
+      }
+
+      
       if (file.length !== 1 || file[0].type !== 'application/json') {
-        alert('Please drop only one JSON file.');
+        alert('Please upload only one JSON file.');
         return;
-      } 
+      }
+
+      // display filename after it is uploaded
+      document.getElementById("dropText").innerText = file[0].name;
 
 
       fileDataDiv.innerHTML = ""; //remove the default msg in the fileData box
