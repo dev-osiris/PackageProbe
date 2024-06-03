@@ -10,16 +10,20 @@ body {
   justify-content: center;
 }
 
+p{
+  margin: 0;
+}
+
 .dropArea {
-  border: 5px solid blue;
-  width: 200px;
-  height: 100px;
+  width: 50vw;
+  height: fit-content;
+  border: solid #b7b4ae;
+  margin: 1rem 0;
+  padding: 1rem 1rem;
 }
-#dropArea.highlight {
-  background-color: #f0f0f0;
-}
+
 .highlight{
-  background-color: aqua;
+  background-color: #2ab4d337;
 }
 
 main{
@@ -59,20 +63,6 @@ h1{
   background: #6bd5e1;
 }
 
-form{
-  padding: 4vh 0;
-  height: 80px;
-}
-
-
-button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
 
 #fileData {
   height: fit-content;

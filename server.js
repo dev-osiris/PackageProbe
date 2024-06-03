@@ -13,21 +13,16 @@ const wss = new WebSocket.Server({ server });
 
 let clients = [];
 
-//////////////////////////////////////////////////////////////////////////////////////
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////
-
 function sendDataToFront(data){
-    const md = markdown();
-    // Send message to all connected WebSocket clients
-    clients.forEach(client => {
-        if (client.readyState === WebSocket.OPEN) {
-            // console.log("DATA: ", data);
-            client.send(JSON.stringify(md.render(data)));
-        }
-    });
+  console.log(data);
+  const md = markdown();
+
+  // Send message to all connected WebSocket clients
+  clients.forEach(client => {
+      if (client.readyState === WebSocket.OPEN) {
+          client.send(JSON.stringify(md.render(data)));
+      }
+  });
 }
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -63,16 +58,8 @@ app.post('/upload', (req, res) => {
             return;
         }
 
-        let filePath;
-        console.log("files", files);
-        try{
-          filePath = files.file[0].filepath;
-        }
-        catch{
-          console.log("No file selected.");
-          sendDataToFront("Please select a file first.");
-          return;
-        }
+        const filePath = files.file[0].filepath;
+
 
         // Read uploaded file
         fs.readFile(filePath, 'utf-8', (err, data) => {
@@ -82,13 +69,10 @@ app.post('/upload', (req, res) => {
                 return;
             }
 
-            // Print file data
-            // console.log('File Data:', data);
             handleFileLoad(data);
         });
     });
 });    
-
 
 
 // WebSocket connection
@@ -97,10 +81,10 @@ wss.on('connection', (ws) => {
     clients.push(ws); // push any new connection to clients[]
 
     ws.on('close', () => {
-        console.log('Client disconnected');
+      console.log('Client disconnected');
 
-        // This ensures that the clients array only contains active WebSocket connections.
-        clients = clients.filter(client => client !== ws);
+      // This ensures that the clients array only contains active WebSocket connections.
+      clients = clients.filter(client => client !== ws);
     });
 });
 
@@ -109,36 +93,19 @@ server.listen(3000, () => {
 });
 
 
-//======================================================================================
-
+//===========================================================================================
 
 let dep_obj = {};
 let dep_count = -1;
 
-// return the details of the latest version of package
-function getLatestVer(data){
-  const versions = Object.keys(data.versions);
-  for(let i = versions.length - 1, count = 0; i >= 0 && count < 50; i--, count++){
-    // shows only the versions with format NN.NN.NN where N is a number
-    if(versions[i].length <= 10){ 
-      const curr_ver = versions[i];
-
-      // returns the latest stable version as on object
-      return data.versions[curr_ver];
-    }
-  }
-}
-
 async function getDependency(package_name, package_version){
   dep_count++;
-  console.log("Curr pkg: ", package_name, package_version);
   sendDataToFront(`curr pkg: ${package_name} ${package_version}`);
   let dependencies;
 
   try{
     const response = await fetch(`https://registry.npmjs.org/${package_name}/${package_version}`, {method: "GET"});
     const data = await response.json();
-    // const latestVerData = getLatestVer(data);
 
     // add the curr package name and ver in the dep_obj if it is empty
     if(Object.keys(dep_obj).length === 0){
@@ -147,17 +114,14 @@ async function getDependency(package_name, package_version){
 
     dependencies = data.dependencies; //TODO: LOOK FOR DEVDEPENDENCIES
     if(dependencies){
-      console.log(package_name, " dependencies: ", dependencies);
       sendDataToFront(`dependencies ${JSON.stringify(dependencies)}`);
       dep_obj = {...dep_obj, ...dependencies}
     }
     else{
-      console.log("No dependencies");
       sendDataToFront(`No dependencies`);
     }
   }
   catch(err){
-    console.log(err);
     sendDataToFront(err);
   }
   return dependencies;
@@ -169,7 +133,7 @@ async function DFS(dependency, vis){
   // DFS of dependency tree
   while(stack.length > 0){
     const curr_dependency = stack.pop();
-    // console.log("curr dep: ", curr_dependency);
+
     if(!curr_dependency){
       continue;
     }
@@ -198,10 +162,6 @@ async function makeJSON(pkg){
 
       // do audit
       execSync("cd JSON && npm audit", { encoding: 'utf-8' }, (_1, audit_report, _2) => {
-        // if(_1) throw _1;
-        console.log(pkg, ": ");
-        console.log(audit_report);
-
         sendDataToFront(`${JSON.stringify(pkg)}: `);
         sendDataToFront(`${audit_report}`);
       }); 
@@ -210,7 +170,6 @@ async function makeJSON(pkg){
 }
 
 async function findVulnerabilites(pkg_to_test){
-
   const package_name = pkg_to_test[0];
   let package_version = pkg_to_test[1];
 
@@ -224,8 +183,7 @@ async function findVulnerabilites(pkg_to_test){
   
   DFS(dependency, vis);
 
-  console.log("total dependencies: ", dep_count);
-  console.log("dep_obj: ", dep_obj);
+  // console.log("dep_obj: ", dep_obj);
 
   sendDataToFront(`Total dependencies: ${dep_count}`);
   
@@ -236,14 +194,7 @@ async function findVulnerabilites(pkg_to_test){
 function handleFileLoad(data) {
   let dependencies = JSON.parse(data).dependencies;
   dependencies = Object.entries(dependencies);
-  
-  //   Object.keys(dependencies).forEach((dependency) => {
-      //     if(dependency.charAt(0) != "@"){
-          //       findVulnerabilites(dependency);
-          //     }
-          //   });
           
-    dependencies = dependencies.filter((dep_ver_pair) => dep_ver_pair[0].charAt(0) !== '@');
-    console.log(dependencies);
-    dependencies.map((dependency) => findVulnerabilites(dependency));
+  dependencies = dependencies.filter((dep_ver_pair) => dep_ver_pair[0].charAt(0) !== '@');
+  dependencies.map((dependency) => findVulnerabilites(dependency));
 }
