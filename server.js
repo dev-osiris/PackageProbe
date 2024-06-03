@@ -89,10 +89,12 @@ function sendDataToFront(data){
   // Send message to all connected WebSocket clients
   clients.forEach(client => {
     if (client.readyState === WebSocket.OPEN) {
-        client.send(JSON.stringify(md.render(data)));
+        const md_message = md.render(data.message);
+        client.send(JSON.stringify({type: data.type, message: md_message}));
     }
   });
 }
+
 
 //===========================================================================================
 
@@ -101,7 +103,7 @@ let dep_count = -1;
 
 async function getDependency(package_name, package_version){
   dep_count++;
-  sendDataToFront(`curr package: ${package_name}@${package_version}`);
+  sendDataToFront({type: "normal", message: `curr package: ${package_name}@${package_version}`});
   let dependencies;
 
   try{
@@ -115,15 +117,15 @@ async function getDependency(package_name, package_version){
 
     dependencies = data.dependencies; //TODO: LOOK FOR DEVDEPENDENCIES
     if(dependencies){
-      sendDataToFront(`dependencies: ${JSON.stringify(dependencies)}`);
+      sendDataToFront({type: "normal", message: `dependencies: ${JSON.stringify(dependencies)}`});
       dep_obj = {...dep_obj, ...dependencies}
     }
     else{
-      sendDataToFront(`No dependencies`);
+      sendDataToFront({type: "normal", message: `No dependencies`});
     }
   }
   catch(err){
-    sendDataToFront(err);
+    sendDataToFront({type: "error", message: `${err}`});
   }
   return dependencies;
 }
@@ -163,8 +165,8 @@ async function makeJSON(pkg){
 
       // do audit
       execSync("cd JSON && npm audit", { encoding: 'utf-8' }, (_1, audit_report, _2) => {
-        sendDataToFront(`${JSON.stringify(pkg)}: `);
-        sendDataToFront(`${audit_report}`);
+        sendDataToFront({type: "normal", message: `${JSON.stringify(pkg)}: `});
+        sendDataToFront({type: "normal", message: `${audit_report}`});
       }); 
     }); 
   });
@@ -186,7 +188,7 @@ async function findVulnerabilites(pkg_to_test){
 
   // console.log("dep_obj: ", dep_obj);
 
-  sendDataToFront(`Total dependencies: ${dep_count}`);
+  sendDataToFront({type: "normal", message: `Total dependencies: ${dep_count}`});
   
   makeJSON(pkg_to_test);
 }
@@ -194,6 +196,17 @@ async function findVulnerabilites(pkg_to_test){
   
 function handleFileLoad(data) {
   let dependencies = JSON.parse(data).dependencies;
+
+  // check if package.json doesn't contain any dependencies
+  if(dependencies === undefined){
+    console.log("No dependencies found in file. File may be misconfigured, empty or corrupt.")
+    sendDataToFront({
+      type: "alert", 
+      message: "No dependencies found in file. File may be misconfigured, empty or corrupt."
+    });
+    return;
+  }
+
   dependencies = Object.entries(dependencies);
           
   dependencies = dependencies.filter((dep_ver_pair) => dep_ver_pair[0].charAt(0) !== '@');

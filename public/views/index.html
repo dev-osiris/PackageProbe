@@ -48,10 +48,24 @@
     socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
         console.log('Message from server:', data);
-        
-        const message = data.replace(/\n/g, '<br>');
-        
-        fileDataDiv.innerHTML += data;
+                
+        console.log("data is: ", data)
+
+
+        // check for it's type
+        if(data.type === "normal"){
+          fileDataDiv.innerHTML += data.message;
+        }
+        else if(data.type === "alert"){
+          alert(data.message.replace(/<\/?p>/g, "")); //remove <p> and </p> tags from alert
+        }
+        else{ //error case
+          const errorElement = document.createElement('div');
+          errorElement.innerHTML = data.message.toUpperCase();
+          errorElement.style.color = 'crimson';
+          fileDataDiv.appendChild(errorElement);
+        }
+
         
         // Auto-scroll to the bottom
         fileDataDiv.scrollTop = fileDataDiv.scrollHeight;
