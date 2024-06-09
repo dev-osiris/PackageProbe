@@ -1,27 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="test.js" defer ></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Download File</title>
 </head>
-<style>
-    #dropArea {
-        border: 5px solid blue;
-        width: 200px;
-        height: 100px;
-    }
-    #dropArea.highlight {
-        background-color: #f0f0f0;
-    }
-    .highlight{
-        background-color: aqua;
-    }
-</style>
 <body>
-    <form id="dropArea">
-        <p>Drag & drop files here</p>
-    <form/>
+  <button id="downloadBtn">Download .txt file</button>
+
+  <script>
+    document.getElementById('downloadBtn').addEventListener('click', () => {
+      const data = 'Your data here...'; // Replace with your actual data
+      const blob = new Blob([data], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'download.txt';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  </script>
 </body>
 </html>

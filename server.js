@@ -13,7 +13,6 @@ const wss = new WebSocket.Server({ server });
 
 let clients = [];
 
-
 app.use(express.static(path.join(__dirname, 'public')));
 
 
@@ -52,16 +51,45 @@ app.post('/upload', (req, res) => {
 
         // Read uploaded file
         fs.readFile(filePath, 'utf-8', (err, data) => {
-            if (err) {
-                res.writeHead(500, { 'Content-Type': 'text/plain' });
-                res.end('Error reading the uploaded file');
-                return;
-            }
+          if (err) {
+              res.writeHead(500, { 'Content-Type': 'text/plain' });
+              res.end('Error reading the uploaded file');
+              return;
+          }
 
-            handleFileLoad(data);
+          handleFileLoad(data);
         });
     });
 });    
+
+
+// Download route to send data as a .txt file
+app.get('/download', (req, res) => {
+  const filePath = path.join(__dirname, 'report.txt');
+
+  // Write the uploaded data to a file
+  fs.writeFile(filePath, reportData, err => {
+    if (err) {
+      console.error('Error writing file:', err);
+      res.status(500).send('Server Error');
+      return;
+    }
+
+    // Send the file to the client
+    res.download(filePath, 'report.txt', err => {
+      if (err) {
+        console.error('Error sending file:', err);
+      }
+
+      // Optionally, delete the file after sending it
+      fs.unlink(filePath, err => {
+        if (err) {
+          console.error('Error deleting file:', err);
+        }
+      });
+    });
+  });
+});
 
 
 // WebSocket connection
@@ -83,7 +111,7 @@ server.listen(3000, () => {
 
 
 function sendDataToFront(data){
-  // console.log(data);
+  // console.log(data.message);
   const md = markdown();
 
   // Send message to all connected WebSocket clients
@@ -99,7 +127,8 @@ function sendDataToFront(data){
 //===========================================================================================
 
 let dep_obj = {};
-let dep_count = -1;
+let dep_count = 0;
+let reportData = "no data currently";
 
 async function getDependency(package_name, package_version){
   dep_count++;
@@ -150,11 +179,11 @@ async function DFS(dependency, vis){
 }
 
 // builds package.json and package-lock.json
-async function makeJSON(pkg){
+async function makeJSON(latest_dep_object){
   const execSync = require('child_process').exec; //executing shell commands
 
   // skeleton data for package.json file
-  let boilerPlateData = `{"dependencies": ${JSON.stringify(dep_obj)} }`
+  let boilerPlateData = `{"dependencies": ${JSON.stringify(latest_dep_object)} }`
 
   execSync(`cd JSON && echo ${boilerPlateData} > package.json`, {encoding: 'utf-8'}, (err) => {
     if (err) throw err;
@@ -165,14 +194,31 @@ async function makeJSON(pkg){
 
       // do audit
       execSync("cd JSON && npm audit", { encoding: 'utf-8' }, (_1, audit_report, _2) => {
-        sendDataToFront({type: "normal", message: `${JSON.stringify(pkg)}: `});
-        sendDataToFront({type: "normal", message: `${audit_report}`});
+        // sendDataToFront({type: "normal", message: `${JSON.stringify(pkg)}: `});
+        sendDataToFront({type: "result", message: `${audit_report}`});
+
+        reportData =  `Dependency count: ${dep_count} \n\nDependencies: ${objectToPlainText(dep_obj)} \n\nReport: \n${audit_report}`;
+
+        deleteJSON();
+        dep_obj = {};
+        dep_count = 0;
+        audit_report = "";
       }); 
     }); 
   });
 }
 
-async function findVulnerabilites(pkg_to_test){
+function objectToPlainText(obj) {
+  let plainText = '';
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      plainText += `${key}@${obj[key]}\n`;
+    }
+  }
+  return plainText;
+}
+
+async function findVulnerabilites(pkg_to_test, callback){
   const package_name = pkg_to_test[0];
   let package_version = pkg_to_test[1];
 
@@ -186,20 +232,19 @@ async function findVulnerabilites(pkg_to_test){
   
   DFS(dependency, vis);
 
-  // console.log("dep_obj: ", dep_obj);
-
-  sendDataToFront({type: "normal", message: `Total dependencies: ${dep_count}`});
   
-  makeJSON(pkg_to_test);
+  sendDataToFront({type: "normal", message: `Total dependencies: ${dep_count}`});
+  console.log("dep_obj: ", dep_obj);
+  callback(dep_obj);
 }
 
   
-function handleFileLoad(data) {
+async function handleFileLoad(data) {
+
   let dependencies = JSON.parse(data).dependencies;
 
   // check if package.json doesn't contain any dependencies
   if(dependencies === undefined){
-    console.log("No dependencies found in file. File may be misconfigured, empty or corrupt.")
     sendDataToFront({
       type: "alert", 
       message: "No dependencies found in file. File may be misconfigured, empty or corrupt."
@@ -210,5 +255,37 @@ function handleFileLoad(data) {
   dependencies = Object.entries(dependencies);
           
   dependencies = dependencies.filter((dep_ver_pair) => dep_ver_pair[0].charAt(0) !== '@');
-  dependencies.map((dependency) => findVulnerabilites(dependency));
+
+  // We use map to create an array of Promises, wrapping the async operation.
+  // using promise here is imp as it is necessary for Promise.all() to work.
+  const promises = dependencies.map(dependency => {
+    return new Promise((resolve, reject) => {
+      findVulnerabilites(dependency, result => { resolve(result) });
+    });
+  });
+
+  try{
+    // Use Promise.all() to wait for all async operations to complete,
+    // ensuring we have all results before proceeding.
+    const results = await Promise.all(promises);
+    console.log("results", results);
+    makeJSON(results.at(-1));
+  }
+  catch(err){
+    console.log(err);
+  }
+}
+
+
+
+function deleteJSON(){
+  // delete old data
+  fs.unlink(path.join(__dirname, 'JSON', 'package.json'), (err) => {
+    if(err) console.log("Error in deleting package.json: ", err);
+    else console.log("Deleted package.json");
+  });
+  fs.unlink(path.join(__dirname, 'JSON', 'package-lock.json'), (err) => {
+    if(err) console.log("Error in deleting package-lock.json: ", err);
+    else console.log("Deleted package-lock.json");
+  });
 }

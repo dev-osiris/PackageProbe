@@ -24,10 +24,15 @@
     </form>
 
     <div id="fileData">_> Upload your package.json above</div>
+    <button id="downloadBtn">Download report</button>
   </main>
 
 
   <script>
+
+    document.getElementById('downloadBtn').addEventListener('click', () => {
+      window.location.href = '/download';
+    });
 
     function handleUploadClick(e) {
       const imgUploadEle = document.getElementById("imgupload");
@@ -47,10 +52,7 @@
         
     socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
-        console.log('Message from server:', data);
-                
-        console.log("data is: ", data)
-
+        console.log('Message from server:', data.message);
 
         // check for it's type
         if(data.type === "normal"){
@@ -58,6 +60,13 @@
         }
         else if(data.type === "alert"){
           alert(data.message.replace(/<\/?p>/g, "")); //remove <p> and </p> tags from alert
+        }
+        else if(data.type === 'result'){
+          const resultElement = document.createElement('div');
+          resultElement.innerHTML = data.message.toUpperCase();
+          resultElement.style.color = '#1b7a8f';
+          resultElement.style.fontWeight = "bold";
+          fileDataDiv.appendChild(resultElement);
         }
         else{ //error case
           const errorElement = document.createElement('div');
