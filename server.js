@@ -193,16 +193,25 @@ async function makeJSON(latest_dep_object){
         if(err) throw err;
 
       // do audit
-      execSync("cd JSON && npm audit", { encoding: 'utf-8' }, (_1, audit_report, _2) => {
-        // sendDataToFront({type: "normal", message: `${JSON.stringify(pkg)}: `});
+      execSync("cd JSON && npm audit --package-lock-only", { encoding: 'utf-8' }, (_1, audit_report, _2) => {
+        
         sendDataToFront({type: "result", message: `${audit_report}`});
 
-        reportData =  `Dependency count: ${dep_count} \n\nDependencies: ${objectToPlainText(dep_obj)} \n\nReport: \n${audit_report}`;
 
-        deleteJSON();
-        dep_obj = {};
-        dep_count = 0;
-        audit_report = "";
+        // create dependency tree, -package-lock-only flag ensures dependencies are fetched from 
+        // package-lock.json and not from node_modules folder
+        execSync("cd JSON && npm ls --all --package-lock-only", { encoding: 'utf-8' }, (err, tree) => {
+
+          if(err) throw err;
+          reportData =  `Total Dependencies: ${dep_count} \n\n` +
+                        `Dependency tree: \n ${tree} \n` +
+                        `Report: \n${audit_report}`;
+  
+          deleteJSON();
+          dep_obj = {};
+          dep_count = 0;
+          audit_report = "";
+        });
       }); 
     }); 
   });
