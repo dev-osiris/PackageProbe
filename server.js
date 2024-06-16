@@ -15,10 +15,6 @@ let clients = [];
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-// const { createServer } = require('http');
-// const server = createServer(app);
-// const wss = new WebSocket.Server({ server });
-
 // Serve static files from the 'views' directory
 // Default route
 app.get('/', (req, res) => {
@@ -73,7 +69,7 @@ app.get('/download', (req, res) => {
   // Write the uploaded data to a file
   fs.writeFile(filePath, reportData, err => {
     if (err) {
-      console.error('Error writing file:', err);
+      console.error('Error writing report.txt:', err);
       res.status(500).send('Server Error');
       return;
     }
@@ -81,18 +77,32 @@ app.get('/download', (req, res) => {
     // Send the file to the client
     res.download(filePath, 'report.txt', err => {
       if (err) {
-        console.error('Error sending file:', err);
+        console.error('Error sending report.txt for download:', err);
       }
 
-      // Optionally, delete the file after sending it
+      // Delete the report file after sending it
       fs.unlink(filePath, err => {
         if (err) {
-          console.error('Error deleting file:', err);
+          console.error('Error deleting report.txt file:', err);
         }
       });
     });
   });
 });
+
+// non existent routes
+// app.use((req, res, next) => {
+//   fs.readFile(path.join(__dirname, 'public', 'views', 'PageNotFound.html'), 'utf-8', (err, data) => {
+//       if (err) {
+//         res.writeHead(500, { 'Content-Type': 'text/plain' });
+//         res.end('Internal Server Error');
+//       } else {
+//         res.writeHead(200, { 'Content-Type': 'text/html' });
+//         res.write(data);
+//         res.end();
+//       }
+//   });
+// })
 
 
 // WebSocket connection
@@ -187,12 +197,8 @@ async function makeJSON(latest_dep_object){
 
   // skeleton data for package.json file
   let boilerPlateData = `{"dependencies": ${JSON.stringify(latest_dep_object)} }`
-  // let boilerPlateData = '{"d":"6"}';
-  // console.log("boilerplate: ", boilerPlateData);
-
-  // execSync(`cd JSON && printf ${boilerPlateData} > package.json`, {encoding: 'utf-8'}, (err) => {
-  //   if (err) throw err;
   
+  // make package.json file
   fs.writeFile(path.join(__dirname, "JSON", "package.json"), boilerPlateData, err => {
     if (err) {
       console.error('Error writing file:', err);
@@ -218,7 +224,7 @@ async function makeJSON(latest_dep_object){
                         `Dependency tree: \n ${tree} \n` +
                         `Report: \n${audit_report}`;
   
-          // deleteJSON();
+          deleteJSON();
           dep_obj = {};
           dep_count = 0;
           audit_report = "";
@@ -228,15 +234,6 @@ async function makeJSON(latest_dep_object){
   });
 }
 
-function objectToPlainText(obj) {
-  let plainText = '';
-  for (const key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      plainText += `${key}@${obj[key]}\n`;
-    }
-  }
-  return plainText;
-}
 
 async function findVulnerabilites(pkg_to_test, callback){
   const package_name = pkg_to_test[0];

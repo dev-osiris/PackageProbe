@@ -52,7 +52,7 @@
         
     socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
-        console.log('Message from server:', data.message);
+        // console.log('Message from server:', data.message);
 
         // check for it's type
         if(data.type === "normal"){
@@ -147,7 +147,6 @@
       const formData = new FormData();
       formData.append('file', file[0]);
 
-      console.log("POST req sent")
       fetch('/upload', {
           method: 'POST',
           body: formData,
