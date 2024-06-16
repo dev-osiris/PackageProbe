@@ -190,7 +190,7 @@ async function makeJSON(latest_dep_object){
   let boilerPlateData = '{{"d": "5" }}';
   console.log("boilerplate: ", boilerPlateData);
 
-  execSync(`cd JSON && echo ${boilerPlateData} > package.json`, {encoding: 'utf-8'}, (err) => {
+  execSync(`cd JSON && echo -n ${boilerPlateData} > package.json`, {encoding: 'utf-8'}, (err) => {
     if (err) throw err;
   
     // generate package-lock.json so that npm audit can be run
