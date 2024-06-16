@@ -8,7 +8,6 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s;
 }
 
 p{
@@ -34,6 +33,21 @@ h1{
   font-size: 3rem;
 }
 
+#dragAndReportDownloadSection{
+  display: flex;
+  flex-direction: row;
+}
+
+#downloadBtn{
+  background-color: #b7b4ae;
+  margin: 2vh 5vw;
+  padding: 0 3vw;
+  font-size: large;
+}
+#downloadBtn:hover{
+  background-color: #818d8e;
+}
+
 
 #fileData {
   height: fit-content;
@@ -45,7 +59,6 @@ h1{
   background-color: #b7b4ae;
   color: #323232;
   padding: 1rem;
-  transition: all 0.5s;
 }
 
 /* width */

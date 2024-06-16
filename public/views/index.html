@@ -14,17 +14,19 @@
     <h3>upload your package.json to find vulnerabilites in your project</h3>
 
     <input type="file" id="imgupload" style="display:none"/>
-    <form 
-      id="uploadForm" 
-      class="dropArea" 
-      enctype="multipart/form-data"
-      onclick="handleUploadClick()"
-    >
+    <section id="dragAndReportDownloadSection">
+      <form 
+        id="uploadForm" 
+        class="dropArea" 
+        enctype="multipart/form-data"
+        onclick="handleUploadClick()"
+      >
       <p id="dropText"> Drag and Drop or click to upload a package.json file.</p>
-    </form>
+      </form>
+      <button id="downloadBtn">Download report</button>
+    </section>
 
     <div id="fileData">_> Upload your package.json above</div>
-    <button id="downloadBtn">Download report</button>
   </main>
 
 
