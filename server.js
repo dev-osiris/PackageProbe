@@ -108,8 +108,8 @@ wss.on('connection', (ws) => {
     });
 });
 
-server.listen(3000, () => {
-    console.log('Server is running at http://localhost:3000');
+server.listen(3000, () => { 
+  console.log(`Server is running at port 3000`);
 });
 
 
@@ -186,7 +186,8 @@ async function makeJSON(latest_dep_object){
   const execSync = require('child_process').exec; //executing shell commands
 
   // skeleton data for package.json file
-  let boilerPlateData = `{"dependencies": "${JSON.stringify(latest_dep_object)}" }`
+  // let boilerPlateData = `{"dependencies": ${JSON.stringify(latest_dep_object)} }`
+  let boilerPlateData = `{"dependencies": {"qs":"6.11.0"} }`
   console.log("boilerplate: ", boilerPlateData);
 
   execSync(`cd JSON && echo ${boilerPlateData} > package.json`, {encoding: 'utf-8'}, (err) => {
@@ -211,7 +212,7 @@ async function makeJSON(latest_dep_object){
                         `Dependency tree: \n ${tree} \n` +
                         `Report: \n${audit_report}`;
   
-          deleteJSON();
+          // deleteJSON();
           dep_obj = {};
           dep_count = 0;
           audit_report = "";
