@@ -186,13 +186,19 @@ async function makeJSON(latest_dep_object){
   const execSync = require('child_process').exec; //executing shell commands
 
   // skeleton data for package.json file
-  // let boilerPlateData = `{"dependencies": ${JSON.stringify(latest_dep_object)} }`
-  let boilerPlateData = '{"d":"5"}';
-  console.log("boilerplate: ", boilerPlateData);
+  let boilerPlateData = `{"dependencies": ${JSON.stringify(latest_dep_object)} }`
+  // let boilerPlateData = '{"d":"6"}';
+  // console.log("boilerplate: ", boilerPlateData);
 
-  execSync(`cd JSON && echo -n ${boilerPlateData} > package.json`, {encoding: 'utf-8'}, (err) => {
-    if (err) throw err;
+  // execSync(`cd JSON && printf ${boilerPlateData} > package.json`, {encoding: 'utf-8'}, (err) => {
+  //   if (err) throw err;
   
+  fs.writeFile(path.join(__dirname, "JSON", "package.json"), boilerPlateData, err => {
+    if (err) {
+      console.error('Error writing file:', err);
+      res.status(500).send('Server Error');
+      return;
+    }
     // generate package-lock.json so that npm audit can be run
     execSync('cd JSON && npm i --package-lock-only', { encoding: 'utf-8' }, (err) => {
         if(err) throw err;
