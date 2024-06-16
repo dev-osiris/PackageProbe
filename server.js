@@ -187,7 +187,7 @@ async function makeJSON(latest_dep_object){
 
   // skeleton data for package.json file
   // let boilerPlateData = `{"dependencies": ${JSON.stringify(latest_dep_object)} }`
-  let boilerPlateData = `{"dependencies": {"qs":"6.11.0"} }`
+  let boilerPlateData = `{"dependencies": {} }`
   console.log("boilerplate: ", boilerPlateData);
 
   execSync(`cd JSON && echo ${boilerPlateData} > package.json`, {encoding: 'utf-8'}, (err) => {
