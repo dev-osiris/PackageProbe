@@ -91,18 +91,18 @@ app.get('/download', (req, res) => {
 });
 
 // non existent routes
-// app.use((req, res, next) => {
-//   fs.readFile(path.join(__dirname, 'public', 'views', 'PageNotFound.html'), 'utf-8', (err, data) => {
-//       if (err) {
-//         res.writeHead(500, { 'Content-Type': 'text/plain' });
-//         res.end('Internal Server Error');
-//       } else {
-//         res.writeHead(200, { 'Content-Type': 'text/html' });
-//         res.write(data);
-//         res.end();
-//       }
-//   });
-// })
+app.use((req, res, next) => {
+  fs.readFile(path.join(__dirname, 'public', 'views', 'PageNotFound.html'), 'utf-8', (err, data) => {
+      if (err) {
+        res.writeHead(500, { 'Content-Type': 'text/plain' });
+        res.end('Internal Server Error');
+      } else {
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.write(data);
+        res.end();
+      }
+  });
+})
 
 
 // WebSocket connection
