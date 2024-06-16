@@ -15,6 +15,9 @@ let clients = [];
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+// const { createServer } = require('http');
+// const server = createServer(app);
+// const wss = new WebSocket.Server({ server });
 
 // Serve static files from the 'views' directory
 // Default route

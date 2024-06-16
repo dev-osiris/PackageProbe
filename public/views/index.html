@@ -29,7 +29,7 @@
 
 
   <script>
-
+    
     document.getElementById('downloadBtn').addEventListener('click', () => {
       window.location.href = '/download';
     });
@@ -44,7 +44,7 @@
     }
 
     const fileDataDiv = document.getElementById('fileData');
-    const socket = new WebSocket('wss://localhost:3000');
+    const socket = new WebSocket(`ws://${location.host}`);
 
     socket.onopen = () => {
         console.log('WebSocket connection established');
