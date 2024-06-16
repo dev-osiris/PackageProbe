@@ -186,8 +186,8 @@ async function makeJSON(latest_dep_object){
   const execSync = require('child_process').exec; //executing shell commands
 
   // skeleton data for package.json file
-  // let boilerPlateData = `{"dependencies": ${JSON.stringify(latest_dep_object)} }`
-  let boilerPlateData = '{{"d": "5" }}';
+  let boilerPlateData = `{"dependencies": ${JSON.stringify(latest_dep_object)} }`
+  // let boilerPlateData = '{{"d": "5" }}';
   console.log("boilerplate: ", boilerPlateData);
 
   execSync(`cd JSON && echo -n ${boilerPlateData} > package.json`, {encoding: 'utf-8'}, (err) => {
