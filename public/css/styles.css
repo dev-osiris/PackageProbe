@@ -39,14 +39,43 @@ h1{
 }
 
 #downloadBtn{
-  background-color: #b7b4ae;
+  font-family: "jetbrains mono", "consolas";
   margin: 2vh 5vw;
   padding: 0 3vw;
   font-size: large;
+  transition: all 0.1s;
 }
-#downloadBtn:hover{
+.inactive{
   background-color: #818d8e;
 }
+.inactive:hover{
+  cursor: not-allowed;
+}
+
+.active{
+  border-bottom: solid 1vw white;
+  background-color: #e6e2d9;
+  border-radius: -1%;
+  /* position: relative; */
+}
+/* .active::after{
+  content: "";
+  position: absolute;
+  top: 90%;
+  left: 0;
+  background-color: #238da4;
+  z-index: -20;
+} */
+.active:hover{
+  cursor: pointer;
+  border-bottom-color: #238da4;
+  border-radius: 0%;
+}
+/* .active:hover::after{
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+} */
 
 
 #fileData {
