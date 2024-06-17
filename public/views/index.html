@@ -21,9 +21,9 @@
         enctype="multipart/form-data"
         onclick="handleUploadClick()"
       >
-      <p id="dropText"> Drag and Drop or click to upload a package.json file.</p>
+      <p id="dropText"> Drag and Drop or click to upload a package.json file here.</p>
       </form>
-      <button id="downloadBtn" class="active" >Download Report</button>
+      <button id="downloadBtn" class="inactive" >Download Report</button>
     </section>
 
     <div id="fileData">_> Upload your package.json above</div>
@@ -53,35 +53,39 @@
     };
         
     socket.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        // console.log('Message from server:', data.message);
+      const data = JSON.parse(event.data);
+      // console.log('Message from server:', data.message);
 
-        // check for it's type
-        if(data.type === "normal"){
+      switch(data.type){
+
+        case "normal": 
           fileDataDiv.innerHTML += data.message;
-        }
-        else if(data.type === "alert"){
+          break;
+
+        case "alert":
           alert(data.message.replace(/<\/?p>/g, "")); //remove <p> and </p> tags from alert
-        }
-        else if(data.type === 'result'){
+          break;
+
+        case 'result':
           const resultElement = document.createElement('div');
           resultElement.innerHTML = data.message.toUpperCase();
           resultElement.style.color = '#1b7a8f';
           resultElement.style.fontWeight = "bold";
           fileDataDiv.appendChild(resultElement);
-
+          
           ActivateDownloadBtn();
-        }
-        else{ //error case
+          break;
+
+        case "error":  
           const errorElement = document.createElement('div');
           errorElement.innerHTML = data.message.toUpperCase();
           errorElement.style.color = 'crimson';
           fileDataDiv.appendChild(errorElement);
-        }
+          break;
+      }
 
-        
-        // Auto-scroll to the bottom
-        fileDataDiv.scrollTop = fileDataDiv.scrollHeight;
+      // Auto-scroll to the bottom
+      fileDataDiv.scrollTop = fileDataDiv.scrollHeight;
     };
         
     socket.onclose = () => {

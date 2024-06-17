@@ -1,5 +1,5 @@
 body {
-  font-family: 'consolas', Arial, sans-serif;
+  font-family: 'jetbrains mono', 'consolas', Arial, sans-serif;
   margin: 0;
   padding: 0;
   background-color: #e6e2d9;
@@ -8,12 +8,16 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
 }
 
-p{
+p, h1, h3{
   margin: 0;
 }
 
+h1{
+  font-size: 3rem;
+}
 
 main{
   display: flex;
@@ -25,13 +29,6 @@ main{
   height: 90vh;
 }
 
-h1, h3{
-  margin: 0;
-}
-
-h1{
-  font-size: 3rem;
-}
 
 #dragAndReportDownloadSection{
   display: flex;
@@ -39,11 +36,12 @@ h1{
 }
 
 #downloadBtn{
-  font-family: "jetbrains mono", "consolas";
-  margin: 2vh 5vw;
-  padding: 0 3vw;
+  font-family: 'jetbrains mono', 'consolas', Arial, sans-serif;
+  margin: 2vh 4vw;
+  padding: 1vh 3vw;
   font-size: large;
   transition: all 0.1s;
+  overflow: hidden;
 }
 .inactive{
   background-color: #818d8e;
@@ -53,29 +51,28 @@ h1{
 }
 
 .active{
-  border-bottom: solid 1vw white;
   background-color: #e6e2d9;
-  border-radius: -1%;
-  /* position: relative; */
+  position: relative;
 }
-/* .active::after{
+.active::after{
+  overflow: hidden;
   content: "";
   position: absolute;
-  top: 90%;
+  top: 100%;
   left: 0;
+  transition: all 0.1s;
   background-color: #238da4;
-  z-index: -20;
-} */
+}
 .active:hover{
   cursor: pointer;
-  border-bottom-color: #238da4;
-  border-radius: 0%;
+  color: #238da4
 }
-/* .active:hover::after{
+.active:hover::after{
   width: 100%;
-  height: 100%;
+  height: 15%;
+  transform: translateY(-100%);
   z-index: 20;
-} */
+}
 
 
 #fileData {
