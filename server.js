@@ -217,7 +217,8 @@ async function makeJSON(latest_dep_object){
         execSync("cd JSON && npm ls --all --package-lock-only", { encoding: 'utf-8' }, (err, tree) => {
           
           if(err) throw err;
-          reportData =  `Total Dependencies: ${dep_count} \n\n` +
+          reportData = `Package Probe Report\n\n` + 
+          `Total Dependencies: ${dep_count} \n\n` +
           `Dependency tree: \n ${tree} \n` +
           `Report: \n${audit_report}`;
           
@@ -249,7 +250,7 @@ async function findVulnerabilites(pkg_to_test, callback){
 
   
   sendDataToFront({type: "normal", message: `Total dependencies: ${dep_count}`});
-  console.log("dep_obj: ", dep_obj);
+  // console.log("dep_obj: ", dep_obj);
   callback(dep_obj);
 }
 
@@ -283,7 +284,6 @@ async function handleFileLoad(data) {
     // Use Promise.all() to wait for all async operations to complete,
     // ensuring we have all results before proceeding.
     const results = await Promise.all(promises);
-    console.log("results", results);
     makeJSON(results.at(-1));
   }
   catch(err){

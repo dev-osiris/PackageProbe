@@ -27,6 +27,7 @@ main{
   width: 80vw;
   padding: 2vh 4vw;
   height: 90vh;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 
@@ -93,20 +94,12 @@ main{
   height: 10px;
 }
 
-/* Track */
-::-webkit-scrollbar-track {
-  background: #b7b4ae; 
-}
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: #818d8e; 
 }
 
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #238da4; 
-}
 
 .dropArea {
   width: 50vw;

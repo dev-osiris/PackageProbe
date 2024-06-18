@@ -1,12 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404: Page not found</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Page Not Found</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'jetbrains mono', 'consolas', Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #323232;
+      text-align: center;
+    }
+    .container {
+      max-width: 40vw;
+      padding: 3rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border: solid #238da4 2px;
+    }
+    h1 {
+      font-size: 5em;
+      margin: 0;
+      color: #238da4; 
+    }
+    p {
+      font-size: 1.2em;
+      margin: 2rem 0;
+      color: #238da4;
+    }
+    a {
+      text-decoration: none;
+      color: #e6e2d9;
+      background-color: #2ab4d3; 
+      padding: 0.5rem 1rem;
+    }
+    a:hover {
+      background-color: #238da4;
+    }
+  </style>
 </head>
 <body>
-    <h1>Error 404</h1>
-    <h2>Page Not Found</h2>
+  <div class="container">
+    <h1>404</h1>
+    <p>Sorry, the page you are looking for cannot be found.</p>
+    <a href="/">Go Back Home</a>
+  </div>
 </body>
 </html>
