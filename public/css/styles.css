@@ -1,8 +1,24 @@
+html{
+  font-size: 62.5%;
+}
+
+:root{
+  --grey1: #e6e2d9;
+  --grey2: #b7b4ae;
+  --grey3: #818d8e;
+  --grey4: #677071;
+  --grey5: #323232;
+
+  --blue1: #2ab4d3;
+  --blue2: #238da4;
+  --blue3: #2ab4d337;
+}
+
 body {
   font-family: 'jetbrains mono', 'consolas', Arial, sans-serif;
   margin: 0;
-  padding: 0;
-  background-color: #e6e2d9;
+  font-size: 1.6rem;
+  background-color: var(--grey1);
   display: flex; 
   height: 100vh;
   flex-direction: column;
@@ -16,62 +32,65 @@ p, h1, h3{
 }
 
 h1{
-  font-size: 3rem;
+  font-size: 4.5rem;
 }
 
 
 main{
   display: flex;
   flex-direction: column;
-  color: #2ab4d3;
-  background-color: #323232;
+  color: var(--blue1);
+  background-color: var(--grey5);
   width: 80vw;
   padding: 2vh 4vw;
   height: 90vh;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 9px 5px 32px -7px rgba(0,0,0,0.75);
 }
 
 footer{
   flex-direction: row;
-  background-color: #323232;
+  background-color: var(--grey5);
   width: 80vw;
   padding: 1vh 4vw;
-  border-top: solid 1px #818d8e;
+  border-top: solid 1px var(--grey3);
   
 }
 footer > a{
-  color: #b7b4ae;
+  color: var(--grey2);
 }
 footer > a:hover{
-  color: #238da4;
+  color: var(--blue2);
 }
 footer > div{
   display: inline;
-  color: #b7b4ae;
+  color: var(--grey2);
 }
 
 
 
 #dragAndReportDownloadSection{
   display: flex;
+  justify-content: space-between;
+  margin-top: 2vh;
 }
 
 #downloadBtn{
   font-family: 'jetbrains mono', 'consolas', Arial, sans-serif;
-  /* margin: 2vh 4vw; */
+  height: 90%;
+  max-width: 75vw;
   padding: 1vh 3vw;
-  font-size: large;
+  font-size: 2rem;
   overflow: hidden;
 }
 .inactive{
-  background-color: #818d8e;
+  background-color: var(--grey3);
 }
 .inactive:hover{
   cursor: not-allowed;
 }
 
 .active{
-  background-color: #e6e2d9;
+  background-color: var(--grey1);
   position: relative;
 }
 .active::after{
@@ -81,11 +100,11 @@ footer > div{
   top: 100%;
   left: 0;
   transition: all 0.1s;
-  background-color: #238da4;
+  background-color: var(--blue2);
 }
 .active:hover{
   cursor: pointer;
-  color: #238da4
+  color: var(--blue2)
 }
 .active:hover::after{
   width: 100%;
@@ -99,11 +118,11 @@ footer > div{
 @media screen and (max-width: 1000px) {
   #dragAndReportDownloadSection{
     flex-direction: column;
-    
   }
-
+  
   #downloadBtn{
-    margin: 0;
+    margin: 1vh 0;
+    max-width: 77vw;
   }
 }
 
@@ -111,10 +130,11 @@ footer > div{
 @media screen and (min-width: 1000px) {
   #dragAndReportDownloadSection{
     flex-direction: row;
+    align-items: center;
   }
 
   #downloadBtn{
-    margin: 2vh 4vw;
+    margin: 0vh 4vw;
   }
 }
 
@@ -125,9 +145,9 @@ footer > div{
   margin: 2vh 0;
   overflow-y: auto;
   overflow-x: auto;
-  background-color: #b7b4ae;
-  color: #323232;
-  padding: 1rem;
+  background-color: var(--grey2);;
+  color: var(--grey5);
+  padding: 1rem 1vw;
 }
 
 /* width */
@@ -138,28 +158,28 @@ footer > div{
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #818d8e; 
+  background: var(--grey3); 
 
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #677071; 
+  background: var(--grey4); 
 }
 
 
 .dropArea {
   width: 50vw;
   height: fit-content;
-  border: solid #b7b4ae;
-  margin: 1rem 0;
-  padding: 1rem 1rem;
+  border: solid var(--grey2);
+  margin: 0rem 0;
+  padding: 2rem 1rem;
 }
 
 .dropArea:hover{
-  background-color: #2ab4d337;
+  background-color: var(--blue3);
 }
 
 .highlight{
-  background-color: #2ab4d337;
+  background-color: var(--blue3);
 }
 
 #OpenUpload{
