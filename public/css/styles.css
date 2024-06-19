@@ -19,6 +19,7 @@ h1{
   font-size: 3rem;
 }
 
+
 main{
   display: flex;
   flex-direction: column;
@@ -53,12 +54,11 @@ footer > div{
 
 #dragAndReportDownloadSection{
   display: flex;
-  flex-direction: row;
 }
 
 #downloadBtn{
   font-family: 'jetbrains mono', 'consolas', Arial, sans-serif;
-  margin: 2vh 4vw;
+  /* margin: 2vh 4vw; */
   padding: 1vh 3vw;
   font-size: large;
   overflow: hidden;
@@ -95,6 +95,29 @@ footer > div{
 }
 
 
+/* small screen */
+@media screen and (max-width: 1000px) {
+  #dragAndReportDownloadSection{
+    flex-direction: column;
+    
+  }
+
+  #downloadBtn{
+    margin: 0;
+  }
+}
+
+/* Larger screen */
+@media screen and (min-width: 1000px) {
+  #dragAndReportDownloadSection{
+    flex-direction: row;
+  }
+
+  #downloadBtn{
+    margin: 2vh 4vw;
+  }
+}
+
 #fileData {
   height: fit-content;
   max-height: 60vh;
@@ -113,10 +136,13 @@ footer > div{
   height: 10px;
 }
 
-
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: #818d8e; 
+
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #677071; 
 }
 
 
