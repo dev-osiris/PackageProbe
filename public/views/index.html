@@ -28,6 +28,11 @@
 
     <div id="fileData">_> Upload your package.json above</div>
   </main>
+  <footer>
+    <div>©2024 PackageProbe</div>
+    <a href="https://www.linkedin.com/in/liveshkumar">Livesh Kumar</a>
+    <a id="github_footer_link" href="https://www.github.com/dev-osiris/PackageProbe">Github</a>
+  </footer>
 
 
   <script>
@@ -46,7 +51,7 @@
     }
 
     const fileDataDiv = document.getElementById('fileData');
-    const socket = new WebSocket(`ws://${location.host}`);
+    const socket = new WebSocket(`wss://${location.host}`);
 
     socket.onopen = () => {
         console.log('WebSocket connection established');

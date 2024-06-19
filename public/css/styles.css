@@ -30,6 +30,26 @@ main{
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+footer{
+  flex-direction: row;
+  background-color: #323232;
+  width: 80vw;
+  padding: 1vh 4vw;
+  border-top: solid 1px #818d8e;
+  
+}
+footer > a{
+  color: #b7b4ae;
+}
+footer > a:hover{
+  color: #238da4;
+}
+footer > div{
+  display: inline;
+  color: #b7b4ae;
+}
+
+
 
 #dragAndReportDownloadSection{
   display: flex;
@@ -41,7 +61,6 @@ main{
   margin: 2vh 4vw;
   padding: 1vh 3vw;
   font-size: large;
-  transition: all 0.1s;
   overflow: hidden;
 }
 .inactive{

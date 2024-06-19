@@ -145,7 +145,7 @@ let reportData = "no data currently";
 
 async function getDependency(package_name, package_version){
   dep_count++;
-  sendDataToFront({type: "normal", message: `curr package: ${package_name}@${package_version}`});
+  sendDataToFront({type: "normal", message: `current package: ${package_name}@${package_version}`});
   let dependencies;
 
   try{
@@ -159,6 +159,7 @@ async function getDependency(package_name, package_version){
 
     dependencies = data.dependencies; //TODO: LOOK FOR DEVDEPENDENCIES
     if(dependencies){
+      // sendDataToFront({type: "normal", message: `dependencies: ${prettyPrintPackages(dependencies)}`});
       sendDataToFront({type: "normal", message: `dependencies: ${JSON.stringify(dependencies)}`});
       dep_obj = {...dep_obj, ...dependencies}
     }
@@ -170,6 +171,14 @@ async function getDependency(package_name, package_version){
     sendDataToFront({type: "error", message: `${err}`});
   }
   return dependencies;
+}
+
+function prettyPrintPackages(packages) {
+  let result = '';
+  for (const [key, value] of Object.entries(packages)) {
+    result += `${key}@${value}\n`;
+  }
+  return result;
 }
 
 async function DFS(dependency, vis){
@@ -290,7 +299,6 @@ async function handleFileLoad(data) {
     console.log(err);
   }
 }
-
 
 
 function deleteJSON(){
