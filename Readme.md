@@ -1,7 +1,7 @@
 
 # PackageProbe
 
-![npm](https://img.shields.io/badge/npm%20v9.5.0-blue)
+![npm](https://img.shields.io/badge/npm-v9.5.0-red)
 ![Render Deployment](https://img.shields.io/badge/deployed%20on-Render-blue)
 
 PackageProbe is a web application that helps developers analyze the dependencies of their NPM projects. Users can easily upload their `package.json` file, view all dependencies and sub-dependencies, and check for vulnerabilities in the entire dependency tree. The application generates a comprehensive report that can be viewed online and downloaded for offline use.
