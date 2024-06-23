@@ -89,8 +89,8 @@ We welcome contributions to improve PackageProbe. To contribute:
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the GNU GPLv3 - see the [LICENSE](/LICENSE) file for details.
 
 ## Contact
 
-For any questions or suggestions, please open an issue or contact [yourname](mailto:youremail@example.com).
+For any questions or suggestions, please open an issue or contact [Livesh Kumar](mailto:liveshkumar123@gmail.com).
