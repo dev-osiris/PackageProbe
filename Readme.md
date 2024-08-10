@@ -84,7 +84,7 @@ PackageProbe is a web application that helps developers analyze the dependencies
 
 This project is deployed on [Render](https://packageprobe.onrender.com/).
 
-![Render Deployment](https://packageprobe.onrender.com/)
+[![Render Deployment](https://img.shields.io/badge/deployed%20on-Render-blue)](https://packageprobe.onrender.com/)
 
 ## Contributing
 
