@@ -68,17 +68,16 @@ PackageProbe is a web application that helps developers analyze the dependencies
 
 ## Screenshots
 
-![Upload](path/to/upload-screenshot.png)
-*Upload your `package.json` file.*
+![LandingPage](./public/images/LandingPage.png)
+*Landing Page*  
+<br>
 
-![Dependencies](path/to/dependencies-screenshot.png)
-*View dependencies and sub-dependencies.*
+![Upload](./public/images/upload.png)
+*Upload your `package.json` file.*  
+<br>
 
-![Vulnerabilities](path/to/vulnerabilities-screenshot.png)
-*Check for vulnerabilities in the dependency tree.*
-
-![Report](path/to/report-screenshot.png)
-*Download the generated report.*
+![Report](./public/images/report.png)
+*Download and view the generated report.*
 
 ## Deployment
 
