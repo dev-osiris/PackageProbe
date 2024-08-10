@@ -142,6 +142,14 @@ function sendDataToFront(data){
 let dep_obj = {};
 let dep_count = 0;
 let reportData = "no data currently";
+let vis = new Set([]); //visit set to avoid visiting duplicate dependencies
+
+function isObjectEmpty(object){
+  if(Object.keys(object).length === 0){
+    return true;
+  }
+  return false;
+}
 
 async function getDependency(package_name, package_version){
   dep_count++;
@@ -153,18 +161,17 @@ async function getDependency(package_name, package_version){
     const data = await response.json();
 
     // add the curr package name and ver in the dep_obj if it is empty
-    if(Object.keys(dep_obj).length === 0){
+    if(isObjectEmpty(dep_obj)){
       dep_obj[data.name] = data.version;
     }
 
     dependencies = data.dependencies; //TODO: LOOK FOR DEVDEPENDENCIES
-    if(dependencies){
-      // sendDataToFront({type: "normal", message: `dependencies: ${prettyPrintPackages(dependencies)}`});
-      sendDataToFront({type: "normal", message: `dependencies: ${JSON.stringify(dependencies)}`});
-      dep_obj = {...dep_obj, ...dependencies}
+    if(dependencies === undefined || isObjectEmpty(dependencies)){
+      sendDataToFront({type: "normal", message: `${package_name}: no dependencies`});
     }
     else{
-      sendDataToFront({type: "normal", message: `No dependencies`});
+      sendDataToFront({type: "normal", message: `${package_name} dependencies: ${JSON.stringify(dependencies)}`});
+      dep_obj = {...dep_obj, ...dependencies}
     }
   }
   catch(err){
@@ -206,6 +213,7 @@ async function makeJSON(latest_dep_object){
 
   // skeleton data for package.json file
   let boilerPlateData = `{"dependencies": ${JSON.stringify(latest_dep_object)} }`
+  console.log("boilerplatedata: ", boilerPlateData);
   
   // make package.json file
   fs.writeFile(path.join(__dirname, "JSON", "package.json"), boilerPlateData, err => {
@@ -235,6 +243,7 @@ async function makeJSON(latest_dep_object){
           sendDataToFront({type: "result", message: `${audit_report}`});
           dep_obj = {};
           dep_count = 0;
+          vis.clear();
           audit_report = "";
         });
       }); 
@@ -253,7 +262,6 @@ async function findVulnerabilites(pkg_to_test, callback){
   }
 
   const dependency = await getDependency(package_name, package_version);
-  let vis = new Set(package_name); //visit set to avoid visiting duplicate dependencies
   
   DFS(dependency, vis);
 
@@ -277,9 +285,12 @@ async function handleFileLoad(data) {
     return;
   }
 
+  
   dependencies = Object.entries(dependencies);
-          
+  console.log("before filter: ", dependencies)
+  
   dependencies = dependencies.filter((dep_ver_pair) => dep_ver_pair[0].charAt(0) !== '@');
+  console.log("after filter: ", dependencies)
 
   // We use map to create an array of Promises, wrapping the async operation.
   // using promise here is imp as it is necessary for Promise.all() to work.
@@ -293,6 +304,7 @@ async function handleFileLoad(data) {
     // Use Promise.all() to wait for all async operations to complete,
     // ensuring we have all results before proceeding.
     const results = await Promise.all(promises);
+    // console.log("results: ", results);
     makeJSON(results.at(-1));
   }
   catch(err){

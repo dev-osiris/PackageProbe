@@ -51,7 +51,7 @@
     }
 
     const fileDataDiv = document.getElementById('fileData');
-    const socket = new WebSocket(`wss://${location.host}`);
+    const socket = new WebSocket(`ws://${location.host}`);
 
     socket.onopen = () => {
         console.log('WebSocket connection established');
@@ -65,6 +65,7 @@
 
         case "normal": 
           fileDataDiv.innerHTML += data.message;
+          fileDataDiv.innerHTML += '<br>';
           break;
 
         case "alert":
