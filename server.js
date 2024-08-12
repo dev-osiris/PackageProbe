@@ -137,7 +137,7 @@ function sendDataToFront(data){
 }
 
 
-//===========================================================================================
+//========================================================================================================
 
 let dep_obj = {};
 let dep_count = 0;
@@ -152,7 +152,6 @@ function isObjectEmpty(object){
 }
 
 async function getDependency(package_name, package_version){
-  dep_count++;
   sendDataToFront({type: "normal", message: `current package: ${package_name}@${package_version}`});
   let dependencies;
 
@@ -160,10 +159,8 @@ async function getDependency(package_name, package_version){
     const response = await fetch(`https://registry.npmjs.org/${package_name}/${package_version}`, {method: "GET"});
     const data = await response.json();
 
-    // add the curr package name and ver in the dep_obj if it is empty
-    if(isObjectEmpty(dep_obj)){
-      dep_obj[data.name] = data.version;
-    }
+    // Add current package to dep_obj:
+    dep_obj[data.name] = data.version;
 
     dependencies = data.dependencies; //TODO: LOOK FOR DEVDEPENDENCIES
     if(dependencies === undefined || isObjectEmpty(dependencies)){
@@ -180,13 +177,6 @@ async function getDependency(package_name, package_version){
   return dependencies;
 }
 
-function prettyPrintPackages(packages) {
-  let result = '';
-  for (const [key, value] of Object.entries(packages)) {
-    result += `${key}@${value}\n`;
-  }
-  return result;
-}
 
 async function DFS(dependency, vis){
   let stack = [dependency];
@@ -202,7 +192,11 @@ async function DFS(dependency, vis){
       if(vis.has(pkg)) continue;
       else vis.add(pkg);
 
-      stack.push(await getDependency(pkg, curr_dependency[pkg]));
+      dep_count = Math.max(dep_count, vis.size);
+      const sub_dependencies = await getDependency(pkg, curr_dependency[pkg]);
+      if (sub_dependencies) {
+        stack.push(sub_dependencies);
+      }
     }
   }
 }
@@ -240,9 +234,11 @@ async function makeJSON(latest_dep_object){
           `Report: \n${audit_report}`;
           
           deleteJSON();
+          sendDataToFront({type: "result", message: `TOTAL DEPENDENCIES: ${dep_count}`});
           sendDataToFront({type: "result", message: `${audit_report}`});
           dep_obj = {};
           dep_count = 0;
+          console.log("VIS SIZE: ", vis.size);
           vis.clear();
           audit_report = "";
         });
@@ -257,17 +253,14 @@ async function findVulnerabilites(pkg_to_test, callback){
   let package_version = pkg_to_test[1];
 
   // remove ^ and ~ if it exists from package version
-  if(package_version[0] === '^' || package_version[0] === '~'){
+  if(package_version[0] === '^' || package_version[0] === '~'){ //TODO: some versions have = < > signs, have to tackle them
     package_version = package_version.slice(1);
   }
 
   const dependency = await getDependency(package_name, package_version);
   
-  DFS(dependency, vis);
-
+  await DFS(dependency, vis);
   
-  sendDataToFront({type: "normal", message: `Total dependencies: ${dep_count}`});
-  // console.log("dep_obj: ", dep_obj);
   callback(dep_obj);
 }
 
@@ -287,11 +280,22 @@ async function handleFileLoad(data) {
 
   
   dependencies = Object.entries(dependencies);
-  console.log("before filter: ", dependencies)
   
   dependencies = dependencies.filter((dep_ver_pair) => dep_ver_pair[0].charAt(0) !== '@');
   console.log("after filter: ", dependencies)
 
+  dep_count = dependencies.length; //initial value of dependency count
+
+  // add initial dependencies in vis
+  // This also makes sure that dep_count is calculated correctly
+  for(let i = 0; i < dependencies.length; i++){
+    vis.add(dependencies[i][0]);
+  }
+
+  await processDependencies(dependencies);
+}
+
+const processDependencies = async (dependencies) =>  {
   // We use map to create an array of Promises, wrapping the async operation.
   // using promise here is imp as it is necessary for Promise.all() to work.
   const promises = dependencies.map(dependency => {
@@ -299,13 +303,12 @@ async function handleFileLoad(data) {
       findVulnerabilites(dependency, result => { resolve(result) });
     });
   });
-
+  
   try{
     // Use Promise.all() to wait for all async operations to complete,
     // ensuring we have all results before proceeding.
     const results = await Promise.all(promises);
-    // console.log("results: ", results);
-    makeJSON(results.at(-1));
+    await makeJSON(results.at(-1));
   }
   catch(err){
     console.log(err);
