@@ -127,6 +127,21 @@ footer > div{
   padding: 1rem 1vw;
 }
 
+#blinking_cursor{
+  font-size: 2rem;
+  font-weight: bold;
+  animation: blink 0.5s infinite;
+}
+
+@keyframes blink {
+  0%, 100%{
+    opacity: 100%;
+  }
+  50%{
+    opacity: 0%;
+  }
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 10px;
