@@ -69,6 +69,7 @@ footer > div{
 
 
 #dragAndReportDownloadSection{
+  width: 77vw;
   display: flex;
   justify-content: space-between;
   margin-top: 2vh;
@@ -78,7 +79,7 @@ footer > div{
   font-family: 'jetbrains mono', 'consolas', Arial, sans-serif;
   height: 90%;
   max-width: 75vw;
-  padding: 1vh 3vw;
+  padding: 1vh 2vw;
   font-size: 2rem;
   overflow: hidden;
 }
@@ -114,30 +115,6 @@ footer > div{
 }
 
 
-/* small screen */
-@media screen and (max-width: 1000px) {
-  #dragAndReportDownloadSection{
-    flex-direction: column;
-  }
-  
-  #downloadBtn{
-    margin: 1vh 0;
-    max-width: 77vw;
-  }
-}
-
-/* Larger screen */
-@media screen and (min-width: 1000px) {
-  #dragAndReportDownloadSection{
-    flex-direction: row;
-    align-items: center;
-  }
-
-  #downloadBtn{
-    margin: 0vh 4vw;
-  }
-}
-
 #fileData {
   height: fit-content;
   max-height: 60vh;
@@ -159,7 +136,7 @@ footer > div{
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: var(--grey3); 
-
+  
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--grey4); 
@@ -167,7 +144,6 @@ footer > div{
 
 
 .dropArea {
-  width: 50vw;
   height: fit-content;
   border: solid var(--grey2);
   padding: 2rem 1rem;
@@ -184,4 +160,32 @@ footer > div{
 #OpenUpload{
   width: 50vw;
   height: 20vh;
+}
+
+/* small screen */
+@media screen and (max-width: 1000px) {
+  #dragAndReportDownloadSection{
+    flex-direction: column;
+  }
+  
+  #downloadBtn{
+    margin: 1vh 0;
+    max-width: 77vw;
+  }
+}
+
+/* Larger screen */
+@media screen and (min-width: 1000px) {
+  #dragAndReportDownloadSection{
+    flex-direction: row;
+    align-items: center;
+  }
+
+  #downloadBtn{
+    margin: 0vh 0vw;
+  }
+
+  .dropArea{
+    width: 55vw;
+  }
 }
