@@ -98,7 +98,7 @@
 
         case "error":  
           const errorElement = document.createElement('div');
-          errorElement.innerHTML = data.message.toUpperCase();
+          errorElement.innerHTML = ">> " + data.message.toUpperCase();
           errorElement.style.color = 'crimson';
           fileDataDiv.appendChild(errorElement);
           break;

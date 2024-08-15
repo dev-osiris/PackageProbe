@@ -152,7 +152,7 @@ function isObjectEmpty(object){
 }
 
 async function getDependency(package_name, package_version){
-  sendDataToFront({type: "normal", message: `current package: ${package_name}@${package_version}`});
+  sendDataToFront({type: "normal", message: "\\>> " + `current package: ${package_name}@${package_version}`});
   let dependencies;
 
   try{
@@ -164,15 +164,15 @@ async function getDependency(package_name, package_version){
 
     dependencies = data.dependencies; //TODO: LOOK FOR DEVDEPENDENCIES
     if(dependencies === undefined || isObjectEmpty(dependencies)){
-      sendDataToFront({type: "normal", message: `${package_name}: no dependencies`});
+      sendDataToFront({type: "normal", message: "\\>> " + `${package_name}: no dependencies`});
     }
     else{
-      sendDataToFront({type: "normal", message: `${package_name} dependencies: ${JSON.stringify(dependencies)}`});
+      sendDataToFront({type: "normal", message: "\\>> " + `${package_name} dependencies: ${JSON.stringify(dependencies)}`});
       dep_obj = {...dep_obj, ...dependencies}
     }
   }
   catch(err){
-    sendDataToFront({type: "error", message: `${err}`});
+    sendDataToFront({type: "error", message: "\\>> " + `${err}`});
   }
   return dependencies;
 }
