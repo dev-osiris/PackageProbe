@@ -26,7 +26,10 @@
         enctype="multipart/form-data"
         onclick="handleUploadClick()"
       >
-      <p id="dropText"> Drag and Drop or click to upload a package.json file here.</p>
+      <p id="dropText">
+        <i class="fa-regular fa-file fa-xl" style="color: #2ab4d3;"></i>
+        Drag & Drop or click to upload a package.json file.
+      </p>
       </form>
       <button id="downloadBtn" class="inactive" disabled>
         <i class="fa-solid fa-file-arrow-down fa-xl inactive""></i>
@@ -59,8 +62,8 @@
     }
 
     const fileDataDiv = document.getElementById('fileData');
-    // const socket = new WebSocket(`wss://${location.host}`);
 
+    // add support of both http and https. http is needed for testing on localhost
     const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
     const socket = new WebSocket(`${protocol}://${location.host}`);
 
@@ -118,7 +121,6 @@
       downloadBtnEle.disabled = false;
       downloadBtnEle.classList.remove("inactive");
       downloadBtnEle.classList.add("active");
-      console.log("activate download btn called");
     }
 
     // Handle dropped files
@@ -171,8 +173,9 @@
         return;
       }
 
-      // display filename after it is uploaded
-      document.getElementById("dropText").innerText = file[0].name;
+      // display file icon and filename after it is uploaded
+      document.getElementById("dropText").innerHTML = '<i class="fa-regular fa-file fa-xl" style="color: #2ab4d3;"></i>' 
+                                                      + " " + file[0].name;
 
 
       fileDataDiv.innerHTML = ""; //remove the default msg in the fileData box
