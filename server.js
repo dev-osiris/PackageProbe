@@ -234,8 +234,9 @@ async function makeJSON(latest_dep_object){
           `Report: \n${audit_report}`;
           
           deleteJSON();
-          sendDataToFront({type: "result", message: `TOTAL DEPENDENCIES: ${dep_count}`});
           sendDataToFront({type: "result", message: `${audit_report}`});
+          sendDataToFront({type: "result", message: `TOTAL DEPENDENCIES: ${dep_count}`});
+          sendDataToFront({type: "result", message: `You can download the generated report now.`});
           dep_obj = {};
           dep_count = 0;
           console.log("VIS SIZE: ", vis.size);
