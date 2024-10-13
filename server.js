@@ -174,12 +174,13 @@ async function getDependency(package_name, package_version){
   catch(err){
     sendDataToFront({type: "error", message: "\\>> " + `${err}`});
   }
-  return dependencies;
+  console.log("return from getDependencies(): ", dependencies);
+  return dependencies; //dependencies is an object of {"package name": "version"}
 }
 
 
 async function DFS(dependency, vis){
-  let stack = [dependency];
+  let stack = [dependency]; //dependency is an object of format {"package name": "version"}
   
   // DFS of dependency tree
   while(stack.length > 0){
@@ -188,12 +189,13 @@ async function DFS(dependency, vis){
     if(!curr_dependency){
       continue;
     }
-    for(let pkg in curr_dependency){
+    for(let pkg in curr_dependency){ //iterating of all package names
       if(vis.has(pkg)) continue;
       else vis.add(pkg);
 
       dep_count = Math.max(dep_count, vis.size);
-      const sub_dependencies = await getDependency(pkg, curr_dependency[pkg]);
+      //                             getDependency(pkg-name, pkg-version) => returns an object
+      const sub_dependencies = await getDependency(pkg, curr_dependency[pkg]); 
       if (sub_dependencies) {
         stack.push(sub_dependencies);
       }
