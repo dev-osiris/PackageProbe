@@ -53,7 +53,6 @@ footer{
   width: 80vw;
   padding: 1vh 4vw;
   border-top: solid 1px var(--grey3);
-  
 }
 footer > a{
   color: var(--grey2);

@@ -55,16 +55,16 @@ app.post('/upload', (req, res) => {
               res.end('Error reading the uploaded file');
               return;
           }
-
+          //data is the full package.json file the user uploads
           handleFileLoad(data);
         });
     });
 });    
 
 
-// Download route to send data as a .txt file
+// Download route to send data as a .html file
 app.get('/download', (req, res) => {
-  const filePath = path.join(__dirname, 'report.txt');
+  const filePath = path.join(__dirname, 'report.html');
 
   // Write the uploaded data to a file
   fs.writeFile(filePath, reportData, err => {
@@ -268,9 +268,9 @@ async function findVulnerabilites(pkg_to_test, callback){
 }
 
   
-async function handleFileLoad(data) {
+async function handleFileLoad(data) { //data is the full package.json file user uploads
 
-  let dependencies = JSON.parse(data).dependencies;
+  let dependencies = JSON.parse(data).dependencies; //extract only the dependency part
 
   // check if package.json doesn't contain any dependencies
   if(dependencies === undefined){
