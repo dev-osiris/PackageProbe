@@ -75,15 +75,15 @@ app.get('/download', (req, res) => {
     }
 
     // Send the file to the client
-    res.download(filePath, 'report.txt', err => {
+    res.download(filePath, 'report.html', err => {
       if (err) {
-        console.error('Error sending report.txt for download:', err);
+        console.error('Error sending report.html for download:', err);
       }
 
       // Delete the report file after sending it
       fs.unlink(filePath, err => {
         if (err) {
-          console.error('Error deleting report.txt file:', err);
+          console.error('Error deleting report.html file:', err);
         }
       });
     });
