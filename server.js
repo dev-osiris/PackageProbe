@@ -6,6 +6,8 @@ const formidable = require('formidable');
 const fsExtra = require('fs-extra');
 const fs = require("fs");
 const markdown = require('markdown-it');
+const cheerio = require('cheerio');
+const { type } = require('os');
 
 const app = express();
 const server = http.createServer(app);
@@ -66,27 +68,41 @@ app.post('/upload', (req, res) => {
 app.get('/download', (req, res) => {
   const filePath = path.join(__dirname, 'report.html');
 
-  // Write the uploaded data to a file
-  fs.writeFile(filePath, reportData, err => {
+  // // Write the uploaded data to a file
+  // fs.writeFile(filePath, reportData, err => {
+  //   if (err) {
+  //     console.error('Error writing report.txt:', err);
+  //     res.status(500).send('Server Error');
+  //     return;
+  //   }
+
+  //   // Send the file to the client
+  //   res.download(filePath, 'report.html', err => {
+  //     if (err) {
+  //       console.error('Error sending report.html for download:', err);
+  //     }
+
+  //     // Delete the report file after sending it
+  //     fs.unlink(filePath, err => {
+  //       if (err) {
+  //         console.error('Error deleting report.html file:', err);
+  //       }
+  //     });
+  //   });
+  // });
+
+  // Send the file to the client
+  res.download(filePath, 'report.html', err => {
     if (err) {
-      console.error('Error writing report.txt:', err);
-      res.status(500).send('Server Error');
-      return;
+      console.error('Error sending report.html for download:', err);
     }
 
-    // Send the file to the client
-    res.download(filePath, 'report.html', err => {
-      if (err) {
-        console.error('Error sending report.html for download:', err);
-      }
-
-      // Delete the report file after sending it
-      fs.unlink(filePath, err => {
-        if (err) {
-          console.error('Error deleting report.html file:', err);
-        }
-      });
-    });
+    // Delete the report file after sending it
+    // fs.unlink(filePath, err => {
+    //   if (err) {
+    //     console.error('Error deleting report.html file:', err);
+    //   }
+    // });
   });
 });
 
@@ -203,6 +219,34 @@ async function DFS(dependency, vis){
   }
 }
 
+async function addDataToReport(newReportData){
+  // Path to the report.html file
+  const ReportfilePath = './report.html';
+
+  // Read the existing HTML file
+  fs.readFile(ReportfilePath, 'utf8', (err, reportTemplateData) => {
+      if (err) {
+          console.error('Error reading file:', err);
+          return;
+      }
+
+      // Load the HTML into Cheerio
+      const $ = cheerio.load(reportTemplateData);
+
+      // Modify only the <pre> tag
+      $('pre').html(newReportData);
+
+      // Write the updated HTML back to the file
+      fs.writeFile(ReportfilePath, $.html(), (err) => {
+          if (err) {
+              console.error('Error writing file:', err);
+          } else {
+              console.log('Report updated successfully.');
+          }
+      });
+  });
+}
+
 // builds package.json and package-lock.json
 async function makeJSON(latest_dep_object){
   const execSync = require('child_process').exec; //executing shell commands
@@ -234,10 +278,13 @@ async function makeJSON(latest_dep_object){
           `Total Dependencies: ${dep_count} \n\n` +
           `Dependency tree: \n ${tree} \n` +
           `Report: \n${audit_report}`;
+
+          addDataToReport(reportData);
           
           deleteJSON();
           sendDataToFront({type: "result", message: `${audit_report}`});
           sendDataToFront({type: "result", message: `TOTAL DEPENDENCIES: ${dep_count}`});
+          sendDataToFront({type: "result", message: ''});
           sendDataToFront({type: "result", message: `You can download the generated report now.`});
           dep_obj = {};
           dep_count = 0;
