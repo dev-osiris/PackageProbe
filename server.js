@@ -283,8 +283,9 @@ async function makeJSON(latest_dep_object){
           
           deleteJSON();
           sendDataToFront({type: "result", message: `${audit_report}`});
+          sendDataToFront({type: "break", message: ''});
           sendDataToFront({type: "result", message: `TOTAL DEPENDENCIES: ${dep_count}`});
-          sendDataToFront({type: "result", message: ''});
+          sendDataToFront({type: "break", message: ''});
           sendDataToFront({type: "result", message: `You can download the generated report now.`});
           dep_obj = {};
           dep_count = 0;

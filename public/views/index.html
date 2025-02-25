@@ -91,6 +91,10 @@
           alert(data.message.replace(/<\/?p>/g, "")); //remove <p> and </p> tags from alert
           break;
 
+        case "break":
+          fileDataDiv.innerHTML += '<br>';
+          break;
+
         case 'result':
           const resultElement = document.createElement('div');
           resultElement.innerHTML = data.message.toUpperCase();
