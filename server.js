@@ -68,29 +68,6 @@ app.post('/upload', (req, res) => {
 app.get('/download', (req, res) => {
   const filePath = path.join(__dirname, 'report.html');
 
-  // // Write the uploaded data to a file
-  // fs.writeFile(filePath, reportData, err => {
-  //   if (err) {
-  //     console.error('Error writing report.txt:', err);
-  //     res.status(500).send('Server Error');
-  //     return;
-  //   }
-
-  //   // Send the file to the client
-  //   res.download(filePath, 'report.html', err => {
-  //     if (err) {
-  //       console.error('Error sending report.html for download:', err);
-  //     }
-
-  //     // Delete the report file after sending it
-  //     fs.unlink(filePath, err => {
-  //       if (err) {
-  //         console.error('Error deleting report.html file:', err);
-  //       }
-  //     });
-  //   });
-  // });
-
   // Send the file to the client
   res.download(filePath, 'report.html', err => {
     if (err) {
@@ -219,7 +196,7 @@ async function DFS(dependency, vis){
   }
 }
 
-async function addDataToReport(newReportData){
+async function addDataToReport(dep_count, tree, audit_report){
   // Path to the report.html file
   const ReportfilePath = './report.html';
 
@@ -233,8 +210,14 @@ async function addDataToReport(newReportData){
       // Load the HTML into Cheerio
       const $ = cheerio.load(reportTemplateData);
 
-      // Modify only the <pre> tag
-      $('pre').html(newReportData);
+      //Modify the Total dependencies span tag
+      $('#total_dependencies_num').html(dep_count);
+
+      //Modify the tree
+      $('#tree_pre').html(tree);
+
+      //Modify the audit report
+      $('#report_pre').html(audit_report);
 
       // Write the updated HTML back to the file
       fs.writeFile(ReportfilePath, $.html(), (err) => {
@@ -274,12 +257,11 @@ async function makeJSON(latest_dep_object){
         execSync("cd JSON && npm ls --all --package-lock-only", { encoding: 'utf-8' }, (err, tree) => {
           
           if(err) throw err;
-          reportData = `Package Probe Report\n\n` + 
-          `Total Dependencies: ${dep_count} \n\n` +
+          reportData = `Total Dependencies: ${dep_count} \n\n` +
           `Dependency tree: \n ${tree} \n` +
           `Report: \n${audit_report}`;
 
-          addDataToReport(reportData);
+          addDataToReport(dep_count, tree, audit_report);
           
           deleteJSON();
           sendDataToFront({type: "result", message: `${audit_report}`});

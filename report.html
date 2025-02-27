@@ -12,18 +12,21 @@
         </header>
         
         <content>
-            <pre>Package Probe Report
-
-Total Dependencies: 2 
-
-Dependency tree: 
- JSON@ C:\Users\Livesh kumar\Vscode_files\PackageProbeSocket\JSON
+            <div class="content_title">File name: package.json</div>
+            <div class="total_dependencies_text">
+                Total Dependencies: <span id="total_dependencies_num">2</span>
+            </div>
+            
+            <div class="tree">
+<pre id="tree_pre">JSON@ C:\Users\Livesh kumar\Vscode_files\PackageProbeSocket\JSON
 ├── hoek@6.1.3
 └── js-tokens@9.0.0
 
- 
-Report: 
-# npm audit report
+</pre>
+            </div>
+
+            <div class="report">
+<pre id="report_pre"># npm audit report
 
 hoek  *
 Severity: high
@@ -36,6 +39,8 @@ node_modules/hoek
 Some issues need review, and may require choosing
 a different dependency.
 </pre>
+            </div>
+
         </content>
 
         <footer>
@@ -82,6 +87,7 @@ a different dependency.
         min-height: 100vh;
         width: 50vw;
         color: var(--grey5);
+        box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.10);
     }
 
     header{
@@ -129,6 +135,18 @@ a different dependency.
 
     pre{
         text-wrap: auto;
+    }
+
+    .total_dependencies_text{
+        background-color: yellowgreen;
+    }
+
+    .tree{
+        background-color: #238da4;
+    }
+
+    .report{
+        background-color: crimson;
     }
 </style>
 
