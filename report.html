@@ -14,36 +14,27 @@
         <content>
             <pre>Package Probe Report
 
-Total Dependencies: 61 
+Total Dependencies: 2 
 
 Dependency tree: 
  JSON@ C:\Users\Livesh kumar\Vscode_files\PackageProbeSocket\JSON
-├─┬ formidable@3.5.1
-│ ├─┬ dezalgo@1.0.4
-│ │ ├── asap@2.0.6
-│ │ └── wrappy@1.0.2
-│ ├── hexoid@1.0.0
-│ └─┬ once@1.4.0
-│   └── wrappy@1.0.2 deduped
-└─┬ ws@8.17.0
-  ├── UNMET OPTIONAL DEPENDENCY bufferutil@^4.0.1
-  └── UNMET OPTIONAL DEPENDENCY utf-8-validate@&gt;=5.0.2
+├── hoek@6.1.3
+└── js-tokens@9.0.0
 
  
 Report: 
 # npm audit report
 
-ws  8.0.0 - 8.17.0
+hoek  *
 Severity: high
-ws affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q
-fix available via `npm audit fix --force`
-Will install ws@8.18.1, which is outside the stated dependency range
-node_modules/ws
+hoek subject to prototype pollution via the clone function. - https://github.com/advisories/GHSA-c429-5p7v-vgjp
+No fix available
+node_modules/hoek
 
 1 high severity vulnerability
 
-To address all issues, run:
-  npm audit fix --force
+Some issues need review, and may require choosing
+a different dependency.
 </pre>
         </content>
 
