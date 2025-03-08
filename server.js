@@ -196,6 +196,25 @@ async function DFS(dependency, vis){
   }
 }
 
+// This date is added to the generated report
+function getFormattedDate(){
+  const now = new Date();
+    
+  // Convert to IST (UTC+5:30)
+  const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC +5:30
+  const istTime = new Date(now.getTime() + istOffset);
+
+  const day = String(istTime.getUTCDate()).padStart(2, '0');
+  const month = String(istTime.getUTCMonth() + 1).padStart(2, '0'); // Months are zero-based
+  const year = istTime.getUTCFullYear();
+  
+  const hours = String(istTime.getUTCHours()).padStart(2, '0');
+  const minutes = String(istTime.getUTCMinutes()).padStart(2, '0');
+  const seconds = String(istTime.getUTCSeconds()).padStart(2, '0');
+
+  return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+}
+
 async function addDataToReport(dep_count, tree, audit_report){
   // Path to the report.html file
   const ReportfilePath = './report.html';
@@ -209,6 +228,8 @@ async function addDataToReport(dep_count, tree, audit_report){
 
       // Load the HTML into Cheerio
       const $ = cheerio.load(reportTemplateData);
+
+      $('#date').html(getFormattedDate());
 
       //Modify the Total dependencies span tag
       $('#total_dependencies_num').html(dep_count);
