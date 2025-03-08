@@ -12,16 +12,16 @@
         </header>
         
         <content>
-            <div class="content_title">File name: package.json</div>
+            <div class="content_title"><strong>File: </strong>package.json</div>
             <div class="total_dependencies_text">
-                Total Dependencies: <span id="total_dependencies_num">2</span>
+                <strong>Dependencies: </strong><span id="total_dependencies_num">1</span>
             </div>
             
             <hr>
 
             <div class="tree">
+                <strong>Dependency Tree </strong>
 <pre id="tree_pre">JSON@ C:\Users\Livesh kumar\Vscode_files\PackageProbeSocket\JSON
-├── hoek@6.1.3
 └── js-tokens@9.0.0
 
 </pre>
@@ -30,18 +30,7 @@
             <hr>
             
             <div class="report">
-<pre id="report_pre"># npm audit report
-
-hoek  *
-Severity: high
-hoek subject to prototype pollution via the clone function. - https://github.com/advisories/GHSA-c429-5p7v-vgjp
-No fix available
-node_modules/hoek
-
-1 high severity vulnerability
-
-Some issues need review, and may require choosing
-a different dependency.
+<pre id="report_pre">found 0 vulnerabilities
 </pre>
             </div>
 
@@ -66,8 +55,6 @@ a different dependency.
     --blue1: #2ab4d3;
     --blue2: #238da4;
     --blue3: #2ab4d337;
-
-    --temp: var(--grey1);
     }
 
     *{
@@ -141,27 +128,14 @@ a different dependency.
 
     pre{
         text-wrap: auto;
-        
     }
 
-    .total_dependencies_text{
-        background-color: var(--temp);
-    }
-    
-    .tree{
-        background-color: var(--temp);
-        
-    }
-    
-    .report{
-        background-color: var(--temp);
-        
-    }
 </style>
 
 <script>
+    const green = "#4E9F3D";
     const report_data = document.getElementById("report_pre");
-    (report_data.innerText === "found 0 vulnerabilities\n") ? report_data.style.color = "green" : report_data.style.color = "crimson";
+    (report_data.innerText === "found 0 vulnerabilities\n") ? report_data.style.color = green: report_data.style.color = "crimson";
 </script>
 
 </body></html>
