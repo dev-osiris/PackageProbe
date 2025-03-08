@@ -8,13 +8,17 @@
     <main>
         <header>
             <h2>PackageProbe Report</h2>
-            <h6>Generated on <span id="date">08-03-2025 21:53:39</span> IST</h6>
+            <h6>Generated on <span id="date">08-03-2025 21:53:39</span> IST </h6>
+            
         </header>
         
         <content>
             <div class="content_title"><strong>File: </strong>package.json</div>
-            <div class="total_dependencies_text">
-                <strong>Dependencies: </strong><span id="total_dependencies_num">61</span>
+            <div class="DependenciesAndBtn">
+                <div>
+                    <strong>Dependencies: </strong><span id="total_dependencies_num">61</span>
+                </div>
+                <button id="printBtn" onclick="window.print();">Print to PDF</button>
             </div>
             
             <hr>
@@ -210,7 +214,23 @@ To address all issues (including breaking changes), run:
     header>h6{
         font-size: 0.7rem;
     }
+
+    .DependenciesAndBtn{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
     
+    #printBtn{
+        border: none;
+        background-color: #323232;
+        color:#e6e2d9;
+    }
+    #printBtn:hover{
+        cursor: pointer;
+        box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.3);
+    }
+
     content{
         padding: 1rem;
         font-size: 1rem;
@@ -239,12 +259,28 @@ To address all issues (including breaking changes), run:
         text-wrap: auto;
     }
 
+    @media print{
+        body{
+            width: 100%;
+            border: solid var(--blue2);
+        }
+        main{
+            width: 100%;
+        }
+        #printBtn{
+            /* Hide print button in PDF */
+            display: none;  
+        }
+    }
+
 </style>
 
 <script>
     const green = "#4E9F3D";
     const report_data = document.getElementById("report_pre");
     (report_data.innerText === "found 0 vulnerabilities\n") ? report_data.style.color = green: report_data.style.color = "crimson";
+
 </script>
 
-</body></html>
+</body>
+</html>
