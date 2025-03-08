@@ -17,6 +17,8 @@
                 Total Dependencies: <span id="total_dependencies_num">2</span>
             </div>
             
+            <hr>
+
             <div class="tree">
 <pre id="tree_pre">JSON@ C:\Users\Livesh kumar\Vscode_files\PackageProbeSocket\JSON
 ├── hoek@6.1.3
@@ -25,6 +27,8 @@
 </pre>
             </div>
 
+            <hr>
+            
             <div class="report">
 <pre id="report_pre"># npm audit report
 
@@ -62,6 +66,8 @@ a different dependency.
     --blue1: #2ab4d3;
     --blue2: #238da4;
     --blue3: #2ab4d337;
+
+    --temp: var(--grey1);
     }
 
     *{
@@ -135,23 +141,27 @@ a different dependency.
 
     pre{
         text-wrap: auto;
+        
     }
 
     .total_dependencies_text{
-        background-color: yellowgreen;
+        background-color: var(--temp);
     }
-
+    
     .tree{
-        background-color: #238da4;
+        background-color: var(--temp);
+        
     }
-
+    
     .report{
-        background-color: crimson;
+        background-color: var(--temp);
+        
     }
 </style>
 
 <script>
-
+    const report_data = document.getElementById("report_pre");
+    (report_data.innerText === "found 0 vulnerabilities\n") ? report_data.style.color = "green" : report_data.style.color = "crimson";
 </script>
 
 </body></html>
