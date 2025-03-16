@@ -8,7 +8,7 @@
     <main>
         <header>
             <h2>PackageProbe Report</h2>
-            <h6>Generated on <span id="date">08-03-2025 21:53:39</span> IST </h6>
+            <h6>Generated on <span id="date">16-03-2025 11:54:58</span> IST </h6>
             
         </header>
         
@@ -16,7 +16,7 @@
             <div class="content_title"><strong>File: </strong>package.json</div>
             <div class="DependenciesAndBtn">
                 <div>
-                    <strong>Dependencies: </strong><span id="total_dependencies_num">61</span>
+                    <strong>Dependencies: </strong><span id="total_dependencies_num">2</span>
                 </div>
                 <button id="printBtn" onclick="window.print();">Print to PDF</button>
             </div>
@@ -26,65 +26,8 @@
             <div class="tree">
                 <strong>Dependency Tree </strong>
 <pre id="tree_pre">JSON@ C:\Users\Livesh kumar\Vscode_files\PackageProbeSocket\JSON
-├─┬ accepts@1.3.8
-│ ├─┬ mime-types@2.1.35
-│ │ └── mime-db@1.52.0
-│arser@1.2.1 deduped
-│ └── statuses@2.0.1 deduped
-├─┬ serve-static@1.15.0
-│ ├── encodeurl@1.0.2 deduped
-│ ├── escape-html@1.0.3 deduped
-│ ├── parseurl@1.3.3 deduped
-│ └── send@0.18.0 deduped
-├── setprototypeof@1.2.0
-├─┬ side-channel@1.1.0
-│ ├── es-errors@1.3.0
-│ ├── object-inspect@1.13.4
-│ ├─┬ side-channel-list@1.0.0
-│ │ ├── es-errors@1.3.0 deduped
-│ │ └── object-inspect@1.13.4 deduped
-│ ├─┬ side-channel-map@1.0.1
-│ │ ├─┬ call-bound@1.0.4
-│ │ │ ├─┬ call-bind-apply-helpers@1.0.2
-│ │ │ │ ├── es-errors@1.3.0 deduped
-│ │ │ │ └── function-bind@1.1.2 deduped
-│ │ │ └── get-intrinsic@1.3.0 deduped
-│ │ ├── es-errors@1.3.0 deduped
-│ │ ├─┬ get-intrinsic@1.3.0
-│ │ │ ├── call-bind-apply-helpers@1.0.2 deduped
-│ │ │ ├── es-define-property@1.0.1
-│ │ │ ├── es-errors@1.3.0 deduped
-│ │ │ ├─┬ es-object-atoms@1.1.1
-│ │ │ │ └── es-errors@1.3.0 deduped
-│ │ │ ├── function-bind@1.1.2
-│ │ │ ├─┬ get-proto@1.0.1
-│ │ │ │ ├─┬ dunder-proto@1.0.1
-│ │ │ │ │ ├── call-bind-apply-helpers@1.0.2 deduped
-│ │ │ │ │ ├── es-errors@1.3.0 deduped
-│ │ │ │ │ └── gopd@1.2.0 deduped
-│ │ │ │ └── es-object-atoms@1.1.1 deduped
-│ │ │ ├── gopd@1.2.0
-│ │ │ ├── has-symbols@1.1.0
-│ │ │ ├─┬ hasown@2.0.2
-│ │ │ │ └── function-bind@1.1.2 deduped
-│ │ │ └── math-intrinsics@1.1.0
-│ │ └── object-inspect@1.13.4 deduped
-│ └─┬ side-channel-weakmap@1.0.2
-│   ├── call-bound@1.0.4 deduped
-│   ├── es-errors@1.3.0 deduped
-│   ├── get-intrinsic@1.3.0 deduped
-│   ├── object-inspect@1.13.4 deduped
-│   └── side-channel-map@1.0.1 deduped
-├── statuses@2.0.1
-├─┬ type-is@1.6.18
-│ ├── media-typer@0.3.0
-│ └── mime-types@2.1.35 deduped
-├── uc.micro@2.1.0
-├── utils-merge@1.0.1
-├── vary@1.1.2
-└─┬ ws@8.17.0
-  ├── UNMET OPTIONAL DEPENDENCY bufferutil@^4.0.1
-  └── UNMET OPTIONAL DEPENDENCY utf-8-validate@&gt;=5.0.2
+├── hoek@6.1.3
+└── js-tokens@9.0.0
 
 </pre>
             </div>
@@ -94,56 +37,16 @@
             <div class="report">
 <pre id="report_pre"># npm audit report
 
-body-parser  &lt;1.20.3
+hoek  *
 Severity: high
-body-parser vulnerable to denial of service when url encoding is enabled - https://github.com/advisories/GHSA-qwcr-r2fm-qrc7
-fix available via `npm audit fix --force`
-Will install express@4.21.2, which is outside the stated dependency range
-node_modules/body-parser
-  express  &lt;=4.21.1 || 5.0.0-alpha.1 - 5.0.0
-  Depends on vulnerable versions of body-parser
-  Depends on vulnerable versions of cookie
-  Depends on vulnerable versions of path-to-regexp
-  Depends on vulnerable versions of send
-  Depends on vulnerable versions of serve-static
-  node_modules/express
+hoek subject to prototype pollution via the clone function. - https://github.com/advisories/GHSA-c429-5p7v-vgjp
+No fix available
+node_modules/hoek
 
-cookie  &lt;0.7.0
-cookie accepts cookie name, path, and domain with out of bounds characters - https://github.com/advisories/GHSA-pxg6-pf52-xh8x
-fix available via `npm audit fix --force`
-Will install cookie@1.0.2, which is a breaking change
-node_modules/cookie
+1 high severity vulnerability
 
-
-path-to-regexp  &lt;=0.1.11
-Severity: high
-Unpatched `path-to-regexp` ReDoS in 0.1.x - https://github.com/advisories/GHSA-rhx6-c78j-4q9w
-path-to-regexp outputs backtracking regular expressions - https://github.com/advisories/GHSA-9wv6-86v2-598j
-fix available via `npm audit fix --force`
-Will install express@4.21.2, which is outside the stated dependency range
-node_modules/path-to-regexp
-
-send  &lt;0.19.0
-send vulnerable to template injection that can lead to XSS - https://github.com/advisories/GHSA-m6fv-jmcg-4jfg
-fix available via `npm audit fix --force`
-Will install send@1.1.0, which is a breaking change
-node_modules/send
-  serve-static  &lt;=1.16.0
-  Depends on vulnerable versions of send
-  node_modules/serve-static
-
-
-ws  8.0.0 - 8.17.0
-Severity: high
-ws affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q
-fix available via `npm audit fix --force`
-Will install ws@8.18.1, which is outside the stated dependency range
-node_modules/ws
-
-7 vulnerabilities (3 low, 4 high)
-
-To address all issues (including breaking changes), run:
-  npm audit fix --force
+Some issues need review, and may require choosing
+a different dependency.
 </pre>
             </div>
 
@@ -282,5 +185,5 @@ To address all issues (including breaking changes), run:
 
 </script>
 
-</body>
-</html>
+
+</body></html>
