@@ -40,6 +40,7 @@ app.post('/upload', (req, res) => {
     form.uploadDir = path.join(__dirname, 'uploads');
     form.keepExtensions = true;
     
+    
     form.parse(req, (err, fields, files) => {
         if (err) {
             res.writeHead(500, { 'Content-Type': 'text/plain' });
@@ -48,7 +49,8 @@ app.post('/upload', (req, res) => {
         }
 
         const filePath = files.file[0].filepath;
-
+        fileName = files.file[0].originalFilename;
+        
 
         // Read uploaded file
         fs.readFile(filePath, 'utf-8', (err, data) => {
@@ -134,8 +136,8 @@ function sendDataToFront(data){
 
 let dep_obj = {};
 let dep_count = 0;
-let reportData = "no data currently";
 let vis = new Set([]); //visit set to avoid visiting duplicate dependencies
+let fileName; //name of the json file user will upload
 
 function isObjectEmpty(object){
   if(Object.keys(object).length === 0){
@@ -234,6 +236,9 @@ async function addDataToReport(dep_count, tree, audit_report){
       //Modify the Total dependencies span tag
       $('#total_dependencies_num').html(dep_count);
 
+      //Add the actual filename of the json file to the report
+      $('#fileName').html(fileName);
+
       //Modify the tree
       $('#tree_pre').html(tree);
 
@@ -278,9 +283,6 @@ async function makeJSON(latest_dep_object){
         execSync("cd JSON && npm ls --all --package-lock-only", { encoding: 'utf-8' }, (err, tree) => {
           
           if(err) throw err;
-          reportData = `Total Dependencies: ${dep_count} \n\n` +
-          `Dependency tree: \n ${tree} \n` +
-          `Report: \n${audit_report}`;
 
           addDataToReport(dep_count, tree, audit_report);
           
