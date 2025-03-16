@@ -14,11 +14,11 @@ PackageProbe is a web application that helps developers analyze the dependencies
 - **Vulnerability Check**: Scans the entire dependency tree and sub depencencies for known vulnerabilities.
 - **Real-time Display**: Shows dependencies and vulnerabilities to the user in real-time.
 - **Report Generation**: Creates a detailed report of the dependencies and vulnerabilities.
-- **Downloadable Report**: Users can download the generated report for offline reference.
+- **Downloadable Report**: Users can download the generated report in PDF/HTML version for offline reference.
 
 ## Technologies Used
 
-- **Backend**: Express.js
+- **Backend**: Express.js, Cheerio
 - **Frontend**: JavaScript, WebSockets, CSS, HTML
 - **Hosting**: Render platform
 
@@ -64,7 +64,7 @@ PackageProbe is a web application that helps developers analyze the dependencies
    - The application will check for known vulnerabilities in the entire dependency tree and display the results.
 
 4. **Generate and Download Report**:
-   - A comprehensive report will be generated and displayed to the user. The report can be downloaded for offline reference.
+   - A comprehensive report will be generated and displayed to the user. The report can be downloaded as HTML/PDF for offline reference.
 
 ## Screenshots
 
@@ -78,6 +78,9 @@ PackageProbe is a web application that helps developers analyze the dependencies
 
 ![Report](./public/images/report.png)
 *Download and view the generated report.*
+
+![PdfRepor](./public/images/PdfReport.png)
+*The report can be printed as PDF version.*
 
 ## Deployment
 
