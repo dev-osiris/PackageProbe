@@ -76,10 +76,11 @@ PackageProbe is a web application that helps developers analyze the dependencies
 *Upload your `package.json` file.*  
 <br>
 
-![Report](./public/images/report.png)
+![Report](./public/images/report_new.png)
 *Download and view the generated report.*
+<br>
 
-![PdfRepor](./public/images/PdfReport.png)
+![PdfReport](./public/images/PdfReport.png)
 *The report can be printed as PDF version.*
 
 ## Deployment
